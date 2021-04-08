@@ -24,6 +24,10 @@ Route::get('/admin/logout', 'AuthController@logout');
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/admin', 'DashboardController@index');
     Route::get('/admin/data', 'DashboardController@data');
+    Route::get('/admin/teacher', 'TeacherController@index');
+    Route::post('/admin/teacher/store', 'TeacherController@store');
+    Route::post('/admin/teacher/{id}/update', 'TeacherController@update');
+    Route::get('/admin/teacher/{id}/destroy', 'TeacherController@destroy');
     Route::get('/admin/data/export/', 'DashboardController@export');
     Route::get('/admin/data/export/table', 'DashboardController@export');
 });

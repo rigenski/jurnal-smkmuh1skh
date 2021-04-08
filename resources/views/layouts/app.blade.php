@@ -47,6 +47,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
                                 Data Jurnal
                             </a>
+                            <a class="nav-link" href="/admin/teacher">
+                                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                Data Guru
+                            </a>
                         </div>
                     </div>
                 </nav>
@@ -78,6 +82,10 @@
                 orientation: "bottom auto"
         });
         });
+
+        $(document).ready(function(){
+		    $('.data').DataTable();
+	    });
         </script>
     </body>
 </html>

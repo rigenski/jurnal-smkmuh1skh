@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Teacher;
+use App\Journal;
 use DateTime;
 use Illuminate\Http\Request;
 
@@ -11,7 +13,8 @@ class JournalsController extends Controller
     {
         date_default_timezone_set("Asia/Jakarta");
         $time = new DateTime();
-        return view('form', compact('time'));
+        $teachers = Teacher::all();
+        return view('form', compact('time', 'teachers'));
     }
 
     public function create(Request $request)
@@ -29,13 +32,13 @@ class JournalsController extends Controller
             'deskripsi' => 'required',
         ]);
 
-        \App\Journal::create($request->all());
+        Journal::create($request->all());
         return redirect('/congrats')->with('status', 'success');
     }
 
     public function show()
     {
-        $data = \App\Journal::all();
+        $data = Journal::all();
         $jurnal = $data->groupBy('kelas');
         // dd($jurnal);
         return view('admin/data', compact('jurnal'));

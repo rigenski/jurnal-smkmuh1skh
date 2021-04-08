@@ -58,9 +58,9 @@
                                     <label for="nama">1. Nama <span class="text-danger"><b>*</b></span></label>
                                     <select class="form-control  @error('nama') is-invalid @enderror" id="nama" name="nama">
                                       <option value="-">-- Pilih Nama --</option>
-                                      <option value="1">1</option>
-                                      <option value="2">2</option>
-                                      <option value="3">3</option>
+                                      @foreach($teachers as $teacher)
+                                      <option value="{{$teacher->nama}}">{{$teacher->nama}}</option>
+                                      @endforeach
                                     </select>
                                   </div>
 
@@ -78,19 +78,19 @@
                                 <div class="form-group my-4">
                                     <label for="kelas">3. Kelas <span class="text-danger"><b>*</b></span></label>
                                     <div class="form-check my-2">
-                                        <input class="form-check-input @error('kelas') is-invalid @enderror"" type="radio" name="kelas" id="kelas1" value="X" ">
+                                        <input class="form-check-input @error('kelas') is-invalid @enderror" type="radio" name="kelas" id="kelas1" value="X" ">
                                         <label class="form-check-label" for="kelas1">
                                           X
                                         </label>
                                     </div>
                                     <div class="form-check my-2">
-                                        <input class="form-check-input @error('kelas') is-invalid @enderror"" type="radio" name="kelas" id="kelas2" value="XI" " >
+                                        <input class="form-check-input @error('kelas') is-invalid @enderror" type="radio" name="kelas" id="kelas2" value="XI" " >
                                         <label class="form-check-label" for="kelas2" >
                                           XI
                                         </label>
                                     </div>
                                     <div class="form-check my-2">
-                                        <input class="form-check-input @error('kelas') is-invalid @enderror"" type="radio" name="kelas" id="kelas3" value="XII" ">
+                                        <input class="form-check-input @error('kelas') is-invalid @enderror" type="radio" name="kelas" id="kelas3" value="XII" ">
                                         <label class="form-check-label" for="kelas3" >
                                           XII
                                         </label>

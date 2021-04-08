@@ -29,7 +29,7 @@
                 
                     @if(session('status'))
                     <h3 class="text-center text-success">
-                        {{ 'Formulir Anda sudah dikirim'}}
+                        {{ 'Formulir Anda sudah terkirim'}}
                     </h3>
                         @else 
                     <h3 class="text-center text-danger">

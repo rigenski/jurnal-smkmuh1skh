@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Teacher;
 use App\Journal;
 use App\Exports\JournalsExport;
 use Illuminate\Http\Request;
@@ -10,9 +11,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardController extends Controller
 {
+    public function cart()
+    {
+    }
+
     public function index()
     {
-        $data_week = DB::table('journals')
+        $weeks = DB::table('journals')
             ->select([
                 DB::raw('count(*) as jumlah'),
                 DB::raw('DATE(tanggal) as tanggal')
@@ -23,22 +28,10 @@ class DashboardController extends Controller
             ->get()
             ->toArray();
 
-        session(['data_week' => $data_week]);
+        $journals = Journal::orderBy('created_at', 'desc')->get();
+        $teachers = Teacher::all();
 
-        $total_journal = DB::table('journals')
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->toArray();;
-
-        $data_journal = DB::table('journals')
-            ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get()
-            ->toArray();;
-
-        // dd(session()->get('data_week'));
-
-        return view('admin/dashboard', ['total_journal' => $total_journal, 'data_journal' => $data_journal]);
+        return view('admin/dashboard', compact('journals', 'teachers'));
     }
 
 
@@ -111,6 +104,8 @@ class DashboardController extends Controller
 
     public function export()
     {
-        return Excel::download(new JournalsExport(), 'journals.xlsx');
+        return Excel::download(new JournalsExport(), 'jurnal_' . date('Y-m-d h:i:s') . '.xlsx');
     }
+
+    
 }

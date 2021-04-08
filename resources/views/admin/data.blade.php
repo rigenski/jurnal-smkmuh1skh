@@ -50,19 +50,23 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>No</th>
                         <th scope="col">Tanggal</th>
                         <th scope="col">Jumlah Data</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $count = 1; ?>
                     @foreach($data as $journal)
                     <tr>
+                        <td>{{ $count }}</td>
                         <td>{{ $journal->tanggal }}</td>
                         <td>{{ $journal->jumlah }}</td>
                     </tr>
+                    <?php $count++ ?>
                     @endforeach
                 </tbody>
             </table>
