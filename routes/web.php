@@ -13,21 +13,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'JournalsController@index');
-Route::post('/create', 'JournalsController@create');
-Route::get('/congrats', 'JournalsController@congrats');
+/**
+ * Auth
+ */
+Route::get('/login', 'AuthController@index')->name('login');
+Route::post('/postLogin', 'AuthController@login')->name('postLogin');
 
-Route::get('/admin/login', 'AuthController@index')->name('login');
-Route::post('/admin/postLogin', 'AuthController@postLogin');
-Route::get('/admin/logout', 'AuthController@logout');
+/**
+ * Teacher
+ */
 
-Route::group(['middleware' => 'auth'], function () {
-    Route::get('/admin', 'DashboardController@index');
-    Route::get('/admin/data', 'DashboardController@data');
-    Route::get('/admin/teacher', 'TeacherController@index');
-    Route::post('/admin/teacher/store', 'TeacherController@store');
-    Route::post('/admin/teacher/{id}/update', 'TeacherController@update');
-    Route::get('/admin/teacher/{id}/destroy', 'TeacherController@destroy');
-    Route::get('/admin/data/export/', 'DashboardController@export');
-    Route::get('/admin/data/export/table', 'DashboardController@export');
+Route::group(['middleware' => ['auth', 'checkRole:admin,teacher']], function () {
+    Route::get('/logout', 'AuthController@logout')->name('logout');
+});
+
+Route::group(['middleware' => ['auth', 'checkRole:teacher']], function () {
+    Route::get('/', 'FrontController@index')->name('home');
+    Route::post('/create', 'FrontController@create')->name('create');
+    Route::get('/congrats', 'FrontController@congrats')->name('congrats');
+});
+
+Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
+    Route::get('/admin', 'DashboardController@index')->name('admin');
+    Route::get('/admin/jurnal', 'JournalController@index')->name('jurnal');
+    Route::get('/admin/jurnal/export/table', 'JournalController@export')->name('export');
+    Route::get('/admin/guru', 'TeacherController@index')->name('guru');
+    Route::post('/admin/guru/import', 'TeacherController@import');
+    Route::post('/admin/guru/store', 'TeacherController@store');
+    Route::post('/admin/guru/{id}/update', 'TeacherController@update');
+    Route::get('/admin/guru/{id}/destroy', 'TeacherController@destroy');
 });

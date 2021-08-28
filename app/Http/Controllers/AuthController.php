@@ -9,21 +9,33 @@ class AuthController extends Controller
 {
     public function index()
     {
-        return view('admin/login');
+        if (Auth::check()) {
+            return redirect()->route('admin');
+        }
+
+        return view('login');
     }
 
-    public function postLogin(Request $request)
+    public function login(Request $request)
     {
-        if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect('/admin');
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required|string',
+        ]);
+
+        Auth::attempt($request->only('username', 'password'));
+
+        if (Auth::check()) {
+            return redirect()->route('home')->with('success', 'Login telah berhasil!');
         }
-        return redirect('/admin/login');
+
+        return redirect()->route('login')->with('error', 'Username atau Password salah!');
     }
 
     public function logout()
     {
         Auth::logout();
 
-        return redirect('/admin/login');
+        return redirect()->route('login');
     }
 }

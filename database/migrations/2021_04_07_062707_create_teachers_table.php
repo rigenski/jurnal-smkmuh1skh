@@ -16,6 +16,7 @@ class CreateTeachersTable extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

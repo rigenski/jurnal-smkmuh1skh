@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Teacher;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TeacherController extends Controller
 {
@@ -11,35 +14,80 @@ class TeacherController extends Controller
     {
         $teachers = Teacher::all();
 
-        return view('/admin/teacher', compact('teachers'));
+        return view('/admin/guru', compact('teachers'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nama' => 'required'
+        $validator = Validator::make($request->all(), [
+            'nomor' => 'required|unique:users,username',
+            'nama' => 'required',
         ]);
 
-        Teacher::create($request->all());
+        if ($validator->fails()) {
+            return redirect('/admin/guru')->with('error', 'Data guru gagal ditambahkan');
+        }
 
-        return redirect('/admin/teacher')->with('mess', 'Data guru berhasil ditambahkan');
+        $user = User::create([
+            "name" => $request->nama,
+            "role" => "teacher",
+            "username" => $request->nomor,
+            "password" => bcrypt("mutuharjo")
+        ]);
+
+        Teacher::create([
+            "nama" => $request->nama,
+            "user_id" => $user->id,
+        ]);
+
+
+        return redirect('/admin/guru')->with('success', 'Data guru berhasil ditambahkan');
+    }
+
+    public function import()
+    {
+        try {
+            Excel::import(new \App\Imports\TeachersImport, request()->file('teachers_data'));
+        } catch (\Exception $ex) {
+            return redirect()->route('guru')->with('error', 'Data guru gagal diimport');
+        }
+
+        return redirect()->route('guru')->with('success', 'Data guru berhasil diimport');
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama' => 'required'
+        $validator = Validator::make($request->all(), [
+            'nomor' => 'required',
+            'nama' => 'required',
         ]);
 
-        Teacher::find($id)->update($request->all());
+        if ($validator->fails()) {
+            return redirect('/admin/guru')->with('error', 'Data guru gagal diperbarui');
+        }
 
-        return redirect('/admin/teacher')->with('mess', 'Data guru berhasil diubah');
+        $teacher = Teacher::find($id);
+
+        $teacher->update([
+            'nama' => $request->nama
+        ]);
+
+        User::find($teacher->user_id)->update([
+            "name" => $request->nama,
+            "username" => $request->nomor,
+        ]);
+
+        return redirect('/admin/guru')->with('success', 'Data guru berhasil diperbarui');
     }
 
     public function destroy($id)
     {
-        Teacher::find($id)->delete();
+        $teacher = Teacher::find($id);
 
-        return redirect('/admin/teacher')->with('mess', 'Data guru berhasil dihapus');
+        $teacher->delete();
+
+        User::find($teacher->user_id)->delete();
+
+        return redirect('/admin/guru')->with('success', 'Data guru berhasil dihapus');
     }
 }
