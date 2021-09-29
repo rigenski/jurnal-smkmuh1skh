@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Journal;
+use App\Student;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
@@ -31,8 +32,8 @@ class JournalsExport implements FromView
             $data = Journal::all();
         }
 
+        $students = Student::all();
 
-
-        return view('admin/table', compact('data'));
+        return view('admin/table', compact('data', 'students'));
     }
 }

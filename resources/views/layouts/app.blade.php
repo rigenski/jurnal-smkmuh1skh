@@ -55,6 +55,27 @@
             }
 
         }
+
+        /* Multi Select */
+
+        .multiselect-container {
+            padding: 0.75rem;
+            height: 20rem;
+            width: 16rem;
+            overflow: scroll;
+        }
+
+        .multiselect-container li {
+            margin-bottom: 0.5rem;
+        }
+
+        .multiselect-container li label {
+            margin-bottom: 0;
+        }
+
+        .multiselect-container .multiselect-item.filter .input-group-btn {
+            display: none;
+        }
     </style>
 </head>
 
@@ -64,7 +85,7 @@
     </div>
 
     @yield('modal')
-    
+
     <script src="{{ asset('/assets/js/lottie-player.js') }}"></script>
     <script src="{{ asset('/assets/js/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ asset('/assets/js/popper.min.js') }}">
@@ -80,20 +101,29 @@
     <script src="{{ asset('/assets/js/dataTables.bootstrap4.min.js')}}" crossorigin="anonymous"></script>
     <script src="{{ asset('/assets/assets/demo/datatables-demo.js')}}"></script>
     <script src="{{ asset('/assets/js/bootstrap-datepicker.min.js')}}"></script>
+    <script src="{{ asset('/assets/js/bootstrap-multiselect.js')}}"></script>
     <script>
-        $(function() {
-                $(".datepicker").datepicker({
+        $(document).ready(function(){
+        $('.data').DataTable();
+
+        $(".datepicker").datepicker({
                 format: "yyyy-mm-dd",
                 autoclose: true,
                 todayHighlight: true,
                 orientation: "bottom auto"
         });
+
+        $('.multi-select').multiselect({
+            enableClickableOptGroups: true,
+            enableCollapsibleOptGroups: true,
+            enableFiltering: true,
+            includeSelectAllOption: true
         });
 
-        $(document).ready(function(){
-		    $('.data').DataTable();
-	    });
+
+      });
     </script>
+    @yield('script')
 
 </body>
 

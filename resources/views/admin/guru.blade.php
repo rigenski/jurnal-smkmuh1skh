@@ -38,7 +38,7 @@
                 <thead>
                     <tr>
                         <th scope="col">No</th>
-                        <th scope="col">Nomor</th>
+                        <th scope="col">Username</th>
                         <th scope="col">Nama</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -52,7 +52,7 @@
                         <td>{{ $teacher->nama }}</td>
                         <td>
                             <a href="#modalEdit" data-toggle="modal"
-                                onclick="$('#modalEdit #formEdit').attr('action', 'guru/{{$teacher->id}}/update'); $('#modalEdit #formEdit #nomor').attr('value', '{{$teacher->user->username}}'); $('#modalEdit #formEdit #nama').attr('value', '{{$teacher->nama}}');"
+                                onclick="$('#modalEdit #formEdit').attr('action', 'guru/{{$teacher->id}}/update'); $('#modalEdit #formEdit #username').attr('value', '{{$teacher->user->username}}'); $('#modalEdit #formEdit #nama').attr('value', '{{$teacher->nama}}');"
                                 class="btn btn-warning">Edit</a>
                             <a href="#modalDelete" data-toggle="modal"
                                 onclick="$('#modalDelete #formDelete').attr('action', 'guru/{{$teacher->id}}/destroy')"
@@ -85,10 +85,10 @@
                 <form action="/admin/guru/store" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="nomor">Nomor</label>
-                        <input type="text" required class="form-control @error('nomor') is-invalid @enderror" id="nomor"
-                            name="nomor">
-                        @error('nomor')
+                        <label for="username">Username</label>
+                        <input type="text" required class="form-control @error('username') is-invalid @enderror"
+                            id="username" name="username">
+                        @error('username')
                         <div class="invalid-feedback">
                             {{ $message}}
                         </div>
@@ -154,49 +154,49 @@
 </div>
 </div>
 
-<!-- Modal Edit -->
-<div class="modal fade" id="modalEdit" data-backdrop="static" data-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Edit Guru</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formEdit" action="" method="post">
-                    @csrf
-                    <div class="form-group">
-                        <label for="nomor">Nomor</label>
-                        <input type="text" required class="form-control @error('nomor') is-invalid @enderror" id="nomor"
-                            name="nomor" value="">
-                        @error('nomor')
-                        <div class="invalid-feedback">
-                            {{ $message}}
+    <!-- Modal Edit -->
+    <div class="modal fade" id="modalEdit" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Edit Guru</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEdit" action="" method="post">
+                        @csrf
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" required class="form-control @error('username') is-invalid @enderror"
+                                id="username" name="username" value="">
+                            @error('username')
+                            <div class="invalid-feedback">
+                                {{ $message}}
+                            </div>
+                            @enderror
                         </div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input type="text" required class="form-control @error('nama') is-invalid @enderror" id="nama"
-                            name="nama" value="">
-                        @error('nama')
-                        <div class="invalid-feedback">
-                            {{ $message}}
+                        <div class="form-group">
+                            <label for="nama">Nama</label>
+                            <input type="text" required class="form-control @error('nama') is-invalid @enderror" id="nama"
+                                name="nama" value="">
+                            @error('nama')
+                            <div class="invalid-feedback">
+                                {{ $message}}
+                            </div>
+                            @enderror
                         </div>
-                        @enderror
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <!-- Modal Delete -->
 <div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -18,7 +18,6 @@ class CreateJournalsTable extends Migration
             $table->string('nama');
             $table->string('tanggal');
             $table->string('kelas');
-            $table->string('kompetensi_keahlian');
             $table->string('jam_ke');
             $table->string('mata_pelajaran');
             $table->string('siswa_hadir');

@@ -14,10 +14,8 @@
         <ul class="navbar-nav navbar-right">
             <li class="dropdown"><a href="#" data-toggle="dropdown"
                     class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                    <img alt="image"
-                        src="https://images.unsplash.com/photo-1512054502232-10a0a035d672?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                        class="rounded-circle mr-1">
-                    <div class="d-sm-none d-lg-inline-block">Hi, {{ auth()->user()->name }}</div>
+                    <i class="fas fa-user mr-2"></i>
+                    <div class="d-sm-none d-lg-inline-block">Hi, Admin</div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a href="{{ route('logout') }}" class="dropdown-item has-icon text-danger">
@@ -38,6 +36,8 @@
                         <span>Dashboard</span></a></li>
                 <li class="@yield('jurnal')"><a class="nav-link" href="/admin/jurnal"><i class="fas fa-book"></i>
                         <span>Jurnal</span></a></li>
+                <li class="@yield('siswa')"><a class="nav-link" href="/admin/siswa"><i class="fas fa-users-cog"></i>
+                        <span>Siswa</span></a></li>
                 <li class="@yield('guru')"><a class="nav-link" href="/admin/guru"><i class="fas fa-users"></i>
                         <span>Guru</span></a></li>
             </ul>

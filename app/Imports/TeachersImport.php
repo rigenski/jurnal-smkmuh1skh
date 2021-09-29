@@ -16,10 +16,9 @@ class TeachersImport implements ToModel
     public function model(array $row)
     {
         $user = User::create([
-            "name" => $row[0],
             "role" => "teacher",
             "username" => $row[1],
-            "password" => bcrypt("mutuharjo")
+            "password" => bcrypt($row[2])
         ]);
 
         return new Teacher([

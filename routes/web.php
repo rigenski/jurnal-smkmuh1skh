@@ -34,12 +34,23 @@ Route::group(['middleware' => ['auth', 'checkRole:teacher']], function () {
 });
 
 Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
+
     Route::get('/admin', 'DashboardController@index')->name('admin');
+
+
     Route::get('/admin/jurnal', 'JournalController@index')->name('jurnal');
     Route::get('/admin/jurnal/export/table', 'JournalController@export')->name('export');
+
+
     Route::get('/admin/guru', 'TeacherController@index')->name('guru');
     Route::post('/admin/guru/import', 'TeacherController@import');
     Route::post('/admin/guru/store', 'TeacherController@store');
     Route::post('/admin/guru/{id}/update', 'TeacherController@update');
     Route::get('/admin/guru/{id}/destroy', 'TeacherController@destroy');
+
+    Route::get('/admin/siswa', 'StudentController@index')->name('siswa');
+    Route::post('/admin/siswa/import', 'StudentController@import');
+    Route::post('/admin/siswa/store', 'StudentController@store');
+    Route::post('/admin/siswa/{id}/update', 'StudentController@update');
+    Route::get('/admin/siswa/{id}/destroy', 'StudentController@destroy');
 });

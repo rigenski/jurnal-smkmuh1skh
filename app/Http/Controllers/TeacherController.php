@@ -20,7 +20,7 @@ class TeacherController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nomor' => 'required|unique:users,username',
+            'username' => 'required|unique:users,username',
             'nama' => 'required',
         ]);
 
@@ -29,9 +29,8 @@ class TeacherController extends Controller
         }
 
         $user = User::create([
-            "name" => $request->nama,
             "role" => "teacher",
-            "username" => $request->nomor,
+            "username" => $request->username,
             "password" => bcrypt("mutuharjo")
         ]);
 
@@ -58,7 +57,7 @@ class TeacherController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'nomor' => 'required',
+            'username' => 'required',
             'nama' => 'required',
         ]);
 
@@ -73,8 +72,8 @@ class TeacherController extends Controller
         ]);
 
         User::find($teacher->user_id)->update([
-            "name" => $request->nama,
-            "username" => $request->nomor,
+            "username" => $request->username,
+            "password" => bcrypt($request->username)
         ]);
 
         return redirect('/admin/guru')->with('success', 'Data guru berhasil diperbarui');
