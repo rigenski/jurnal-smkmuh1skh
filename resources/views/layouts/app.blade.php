@@ -7,19 +7,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Jurnal Guru Mutuharjo</title>
 
-    <link rel="stylesheet" href="{{asset('/assets/css/bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{asset('/assets/css/all.css')}}">
-    <link rel="stylesheet" href="{{asset('/assets/css/style.css')}}">
-    <link rel="stylesheet" href="{{asset('/assets/css/components.css')}}">
-    <link rel="stylesheet" href="{{asset('/assets/css/dataTables.bootstrap4.min.css')}}">
-    <link rel="stylesheet" href="{{asset('/assets/css/bootstrap-datepicker.min.css')}}">
+    <link rel="stylesheet" href="{{asset('/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('/css/all.css')}}">
+    <link rel="stylesheet" href="{{asset('/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('/css/components.css')}}">
+    <link rel="stylesheet" href="{{asset('/css/dataTables.bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{asset('/css/bootstrap-datepicker.min.css')}}">
     <style>
         #form__title {
             font-size: 1.4rem;
         }
 
         #form__desc {
-            font-size: 0.8rem;
+            font-size: 1rem;
         }
 
 
@@ -29,7 +29,7 @@
             }
 
             #form__desc {
-                font-size: 1rem;
+                font-size: 1.2rem;
             }
 
         }
@@ -40,7 +40,7 @@
             }
 
             #form__desc {
-                font-size: 1.2rem;
+                font-size: 1.4rem;
             }
 
         }
@@ -51,7 +51,7 @@
             }
 
             #form__desc {
-                font-size: 1.4rem;
+                font-size: 1.8rem;
             }
 
         }
@@ -86,22 +86,23 @@
 
     @yield('modal')
 
-    <script src="{{ asset('/assets/js/lottie-player.js') }}"></script>
-    <script src="{{ asset('/assets/js/jquery-3.3.1.min.js') }}"></script>
-    <script src="{{ asset('/assets/js/popper.min.js') }}">
+    <script src="{{ asset('/js/lottie-player.js') }}"></script>
+    <script src="{{ asset('/js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ asset('/js/popper.min.js') }}">
     </script>
-    <script src="{{ asset('/assets/js/bootstrap.min.js') }}">
+    <script src="{{ asset('/js/bootstrap.min.js') }}">
     </script>
-    <script src="{{ asset('/assets/js/jquery.nicescroll.min.js') }}"></script>
-    <script src="{{ asset('/assets/js/moment.min.js') }}"></script>
-    <script src="{{ asset('/assets/js/stisla.js') }}"></script>
-    <script src="{{ asset('/assets/js/scripts.js') }}"></script>
-    <script src="{{ asset('/assets/js/custom.js') }}"></script>
-    <script src="{{ asset('/assets/js/jquery.dataTables.min.js')}}" crossorigin="anonymous"></script>
-    <script src="{{ asset('/assets/js/dataTables.bootstrap4.min.js')}}" crossorigin="anonymous"></script>
-    <script src="{{ asset('/assets/assets/demo/datatables-demo.js')}}"></script>
-    <script src="{{ asset('/assets/js/bootstrap-datepicker.min.js')}}"></script>
-    <script src="{{ asset('/assets/js/bootstrap-multiselect.js')}}"></script>
+    <script src="{{ asset('/js/jquery.nicescroll.min.js') }}"></script>
+    <script src="{{ asset('/js/moment.min.js') }}"></script>
+    <script src="{{ asset('/js/stisla.js') }}"></script>
+    <script src="{{ asset('/js/scripts.js') }}"></script>
+    <script src="{{ asset('/js/custom.js') }}"></script>
+    <script src="{{ asset('/js/jquery.dataTables.min.js')}}" crossorigin="anonymous"></script>
+    <script src="{{ asset('/js/dataTables.bootstrap4.min.js')}}" crossorigin="anonymous"></script>
+    <script src="{{ asset('/js/bootstrap-datepicker.min.js')}}"></script>
+    <script src="{{ asset('/js/bootstrap-multiselect.js')}}"></script>
+    <script src="{{ asset('/js/chart.js')}}"></script>
+
     <script>
         $(document).ready(function(){
         $('.data').DataTable();

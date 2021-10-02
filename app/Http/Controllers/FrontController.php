@@ -6,6 +6,7 @@ use App\Activity;
 use App\Choice;
 use App\Journal;
 use App\Student;
+use App\Teacher;
 use DateTime;
 use Illuminate\Http\Request;
 
@@ -17,8 +18,10 @@ class FrontController extends Controller
         $time = new DateTime();
         $activities = Activity::where("user_id", auth()->user()->id)->get();
         $students = Student::all();
+        $user = Teacher::where('user_id', auth()->user()->id)->get();
+        $user = $user[0];
 
-        return view('form', compact('time', 'activities', 'students'));
+        return view('form', compact('time', 'activities', 'students', 'user'));
     }
 
     public function create(Request $request)

@@ -33,7 +33,6 @@ class StudentController extends Controller
             'nis' => 'required|unique:students,nis',
             'nama' => 'required',
             'kelas' => 'required',
-            'jurusan' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -44,7 +43,6 @@ class StudentController extends Controller
             'nis' => $request->nis,
             'nama' => $request->nama,
             'kelas' => $request->kelas,
-            'jurusan' => $request->jurusan,
         ]);
 
 
@@ -57,7 +55,6 @@ class StudentController extends Controller
             'nis' => 'required',
             'nama' => 'required',
             'kelas' => 'required',
-            'jurusan' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -70,7 +67,6 @@ class StudentController extends Controller
             'nis' => $request->nis,
             'nama' => $request->nama,
             'kelas' => $request->kelas,
-            'jurusan' => $request->jurusan,
         ]);
 
         return redirect('/admin/siswa')->with('success', 'Data siswa berhasil diperbarui');

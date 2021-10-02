@@ -21,7 +21,7 @@
         </p>
         @endif
         <a href="{{ route('home') }}" class="btn btn-success mt-4">Kembali</a>
-        <a href="#" class="mt-4 font-weight-bold border-bottom border-danger text-danger">Logout</a>
+        <a href="{{ route('logout') }}" class="mt-4 font-weight-bold border-bottom border-danger text-danger">Logout</a>
     </div>
 </div>
 @endsection

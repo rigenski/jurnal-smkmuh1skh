@@ -3,24 +3,25 @@
 @section('main')
 <div class="container my-0 my-sm-5 px-0 px-sm-2">
     <div class="card m-0 bg-white shadow-md">
-        <div class="card-header bg-success p-3 p-sm-4 py-4 py-sm-5">
-            <div class="row my-4 my-md-4">
-                <div class="col-2 col-lg-1 pr-1 pl-md-4">
-                    <img src=" {{asset('assets/img/logo-smk.png')}}" class="img-fluid">
-                </div>
-                <div class="col-10 col-lg-11  pl-3 pl-md-4">
-                    <h6 id="form__desc" class="text-white">Semester Genap Tahun Pelajaran
-                        2021/2022</h6>
-                    <h1 id="form__title" class="text-white">E-Jurnal Mengajar Guru Bulan
-                        {{ $time->format('F')}} {{ $time->format('Y')}}</h1>
-                </div>
+        <div class="card-header bg-success p-3 p-sm-4 py-sm-5 row py-4">
+            <div class="col-2 col-lg-1 pr-1 pl-md-4">
+                <img src="{{asset('/img/logo-smk.png')}}" class="img-fluid">
+            </div>
+            <div class="col-10 col-lg-11  pl-3 pl-md-4">
+                <h1 id="form__title" class="text-white">Jurnal Mengajar Pendidik</h1>
+                <h6 id="form__desc" class="text-white">Semester Genap Tahun Pelajaran
+                    2021/2022</h6>
             </div>
         </div>
         <div class="card-body p-3 p-sm-5">
-            <div class="d-flex justify-content-between mt-4">
-                <p class="h6 font-weight-light">Selamat datang, <span
-                        class="font-weight-bold text-primary ">{{ auth()->user()->name }}</span>
-                </p>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <p class="h6 font-weight-light">Selamat datang, <span
+                            class="font-weight-bold text-primary ">{{ $user->nama }}</span>
+                    </p>
+                    <h5>Bulan
+                        {{ $time->format('F')}} {{ $time->format('Y')}}</h5>
+                </div>
                 <div class="d-flex">
                     <a href="#modalHistori" data-toggle="modal" class="h6 ">
                         <span class="font-weight-bold text-success border-bottom border-success mx-1">
@@ -52,13 +53,21 @@
 
                 <div class="form-group my-4">
                     <label for="kompetensi_keahlian">2. Kelas<span class="text-danger"><b>*</b></span></label>
+
+                    <select class="form-control mt-2 @error('kelas') is-invalid @enderror" id="kelas_container"
+                        name="kelas_container" autocomplete="off">
+                        <option>X</option>
+                        <option>XI</option>
+                        <option>XII</option>
+                    </select>
+                    <small id="kompetensi_keahlian" class="form-text text-muted mt-2">Pilih Tingkat Terlebih
+                        Dahulu</small>
+
                     <select class="form-control mt-2 @error('kelas') is-invalid @enderror" id="kelas" name="kelas"
                         autocomplete="off">
-                        <option>X TKRO</option>
-                        <option>XI RPL</option>
-                        <option>XII TKJ</option>
-                        {{-- <option>XII TEI</option> --}}
+
                     </select>
+                    <small id="kompetensi_keahlian" class="form-text text-muted mt-2">Silahkan Pilih Kelas</small>
                     @error('kompetensi_keahlian')
                     <div class="invalid-feedback">
                         {{ $message}}
@@ -91,78 +100,37 @@
                     @enderror
                 </div>
 
-                {{-- <div class="form-group my-4">
-                    <label for="siswa_hadir">5. Jumlah Siswa yang Hadir <span
+                <div class="form-group my-4">
+                    <label for="deskripsi">5. Deskripsi kegiatan belajar mengajar <span
                             class="text-danger"><b>*</b></span></label>
-                    <input type="text" class="form-control mt-2 @error('siswa_hadir') is-invalid @enderror"
-                        id="siswa_hadir" name="siswa_hadir" autocomplete="off" value="{{old('siswa_hadir')}}">
-                <small id="siswa_hadir" class="form-text text-muted mt-2">Contoh Penulisan : 35</small>
-                @error('siswa_hadir')
-                <div class="invalid-feedback">
-                    {{ $message}}
+                    <input type="text" class="form-control mt-2 @error('deskripsi') is-invalid @enderror" id="deskripsi"
+                        name="deskripsi" autocomplete="off" value="{{old('deskripsi')}}">
+                    @error('deskripsi')
+                    <div class="invalid-feedback">
+                        {{ $message}}
+                    </div>
+                    @enderror
                 </div>
-                @enderror
-        </div>
 
-        <div class="form-group my-4">
-            <label for="siswa_tidak_hadir">6. Jumlah Siswa yang tidak hadir <span
-                    class="text-danger"><b>*</b></span></label>
-            <input type="text" class="form-control mt-2 @error('siswa_tidak_hadir') is-invalid @enderror"
-                id="siswa_tidak_hadir" name="siswa_tidak_hadir" autocomplete="off" value="{{old('siswa_tidak_hadir')}}">
-            <small id="siswa_tidak_hadir" class="form-text text-muted mt-2">Contoh Penulisan :
-                35</small>
-            @error('siswa_tidak_hadir')
-            <div class="invalid-feedback">
-                {{ $message}}
-            </div>
-            @enderror
-        </div> --}}
+                <div class="form-group my-4">
+                    <label class="d-block" for="siswa">6. Siswa Tanpa Keterangan <span
+                            class="text-danger"><b>*</b></span></label>
+                    <small id="jam_ke" class="form-text text-muted mt-2">Centang siswa yang tidak hadir</small>
+                    <div id="siswa">
+                    </div>
+                    @error('siswa')
+                    <div class="invalid-feedback">
+                        {{ $message}}
+                    </div>
+                    @enderror
+                </div>
 
-        <div class="form-group my-4">
-            <label for="deskripsi">5. Deskripsi kegiatan belajar mengajar <span
-                    class="text-danger"><b>*</b></span></label>
-            <input type="text" class="form-control mt-2 @error('deskripsi') is-invalid @enderror" id="deskripsi"
-                name="deskripsi" autocomplete="off" value="{{old('deskripsi')}}">
-            @error('deskripsi')
-            <div class="invalid-feedback">
-                {{ $message}}
-            </div>
-            @enderror
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success px-5 mt-2 mb-4">Kirim</button>
+                </div>
+            </form>
         </div>
-
-        <div class="form-group my-4">
-            <label class="d-block" for="siswa">6. Siswa Tanpa Keterangan <span
-                    class="text-danger"><b>*</b></span></label>
-            <small id="jam_ke" class="form-text text-muted mt-2">Centang siswa yang tidak hadir</small>
-            {{-- <select class="form-control multi-select mt-2 @error('siswa') is-invalid @enderror"
-                        multiple="multiple" name="siswa[]" id="siswa" required>
-                        @foreach($students as $student)
-                        <option value={{$student->id}}>{{ $student->nama }}</option>
-            @endforeach
-            </select> --}}
-            <div id="siswa">
-                {{-- @foreach($students as $student)
-                <div class="form-check my-2">
-                    <input class="form-check-input" type="checkbox" name="siswa[]" value="{{$student->id}}">
-                <label class=" form-check-label" for="kelas1">
-                    {{ $student->nama }}
-                </label>
-            </div>
-            @endforeach --}}
-        </div>
-        @error('siswa')
-        <div class="invalid-feedback">
-            {{ $message}}
-        </div>
-        @enderror
     </div>
-
-    <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-success px-5 mt-2 mb-4">Kirim</button>
-    </div>
-    </form>
-</div>
-</div>
 </div>
 @endsection
 
@@ -213,31 +181,97 @@
 
 @section('script')
 <script>
-    const kelasContainer = document.querySelector('#kelas');
-    const siswaContainer = document.querySelector('#siswa');
+    // data from laravel
+    const data = <?= $students ?>;
+    
+    // declare element variable
+    const elKelasContainer = document.querySelector('#kelas_container');
+    const elKelas = document.querySelector('#kelas');
+    const elSiswa = document.querySelector('#siswa');
+    
+    // data array
+    let classX = [];
+    let classXI = [];
+    let classXII = [];
 
-    const changeSiswa = () => {
-        const data = <?= $students ?>;
-        let siswa = [];
+    // init kelas to array 
+    const setKelas = () => {
+        data.map((x, i) => {
+            const kelas = x.kelas.split(' / ');
 
-        for(let i = 0; i < data.length; i++) {
-            if(kelasContainer.value == data[i].kelas) {
-                siswa.push(data[i]);
+            if(kelas[0] == 'X') {
+                classX.push(x.kelas);
+            } else if(kelas[0] == 'XI') {
+                classXI.push(x.kelas);
+            } else if(kelas[0] == 'XII') {
+                classXII.push(x.kelas);
             }
+        })
+        
+        const array_unnique = (value, index, self) => {
+            return self.indexOf(value) === index;
         }
 
-        siswaContainer.innerHTML = '';
+        classX = classX.filter(array_unnique);
+        classXI = classXI.filter(array_unnique);
+        classXII = classXII.filter(array_unnique);
+    }
 
-        siswa.map((i) => {
-            siswaContainer.innerHTML += `<div class='form-check my-2'><input class='form-check-input' type='checkbox' name='siswa[]' value='${i.id}'><label class=' form-check-label' for='kelas1'>${i.nama}</label></div>`
+    // if kelas on change
+    const changeKelas = (value) => {
+        const kelasValue = elKelasContainer.value;
+
+        elKelas.innerHTML = '';
+
+        if(kelasValue == 'X') {
+            classX.map((x) => {
+                elKelas.innerHTML += `<option>${x}</option>`
+            })
+        } else if(kelasValue == 'XI') {
+            classXI.map((x) => {
+                elKelas.innerHTML += `<option>${x}</option>`
+            })
+        } else if(kelasValue == 'XII') {
+            classXII.map((x) => {
+                elKelas.innerHTML += `<option>${x}</option>`
+            })
+        }
+
+        changeSiswa();
+    }
+
+    // if siswa on change
+    const changeSiswa = () => {
+        let siswa = [];
+
+        data.map((x, i) => {
+            const kelas = x.kelas.split(' / ');
+            
+            if(elKelas.value == x.kelas) {
+                siswa.push(x);
+            }
+        })
+
+        elSiswa.innerHTML = '';
+
+        siswa.map((x) => {
+            elSiswa.innerHTML += `<div class='form-check my-2'><input class='form-check-input' type='checkbox' name='siswa[]' value='${x.id}'><label class=' form-check-label' for='kelas1'>${x.nama}</label></div>`
         });
     }
 
-    kelasContainer.addEventListener('change', () => {
+    elKelasContainer.addEventListener('change', () => {
+        changeKelas();
+    })
+
+    elKelas.addEventListener('change', () => {
         changeSiswa();
     })
 
-    window.onload = changeSiswa();
+    window.onload = () => {
+        setKelas();
+        changeKelas();
+        changeSiswa();
+    }
     
 
 </script>

@@ -11,6 +11,7 @@ class JournalController extends Controller
 {
     public function index(Request $request)
     {
+        date_default_timezone_set("Asia/Jakarta");
         if ($request->has('search1') && $request->search2 == null) {
             $data = DB::table('journals')
                 ->select([

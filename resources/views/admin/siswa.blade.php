@@ -51,10 +51,10 @@
             <td><?= $count ?></td>
             <td>{{ $student->nis}}</td>
             <td>{{ $student->nama }}</td>
-            <td>{{ $student->kelas }} {{ $student->jurusan }}</td>
+            <td>{{ $student->kelas }}</td>
             <td>
               <a href="#modalEdit" data-toggle="modal"
-                onclick="$('#modalEdit #formEdit').attr('action', 'siswa/{{$student->id}}/update'); $('#modalEdit #formEdit #nis').attr('value', '{{$student->nis}}'); $('#modalEdit #formEdit #nama').attr('value', '{{$student->nama}}'); $('#modalEdit #formEdit #kelas').attr('value', '{{$student->kelas}}'); $('#modalEdit #formEdit #jurusan').attr('value', '{{$student->jurusan}}');"
+                onclick="$('#modalEdit #formEdit').attr('action', 'siswa/{{$student->id}}/update'); $('#modalEdit #formEdit #nis').attr('value', '{{$student->nis}}'); $('#modalEdit #formEdit #nama').attr('value', '{{$student->nama}}'); $('#modalEdit #formEdit #kelas').attr('value', '{{$student->kelas}}');"
                 class="btn btn-warning">Edit</a>
               <a href="#modalDelete" data-toggle="modal"
                 onclick="$('#modalDelete #formDelete').attr('action', 'siswa/{{$student->id}}/destroy')"
