@@ -21,7 +21,7 @@ class CheckRole
 
         if (auth()->user()->role == "admin") {
             return redirect('/admin');
-        } else if (auth()->user()->role == "teacher") {
+        } else if (auth()->user()->role == "guru" || "karyawan") {
             return redirect('/');
         }
 

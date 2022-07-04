@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Teacher;
-use App\Journal;
-use App\Student;
+use App\Guru;
+use App\JurnalGuru;
+use App\Siswa;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -14,20 +14,20 @@ class DashboardController extends Controller
     public function index()
     {
         date_default_timezone_set("Asia/Jakarta");
-        $journals = Journal::orderBy('tanggal', 'desc')->get();
-        $teachers = Teacher::all();
-        $students = Student::all();
 
-        $journals_day = Journal::whereDate('tanggal', Carbon::today())->select([
+        $guru = Guru::all();
+        $siswa = Siswa::all();
+
+        $jurnal_guru_per_hari = JurnalGuru::whereDate('tanggal', Carbon::today())->select([
             DB::raw('siswa_hadir'),
             DB::raw('siswa_tidak_hadir'),
             DB::raw('DATE(tanggal) as tanggal')
         ])->get()->toArray();
 
-        $journals_week = [];
+        $jurnal_guru_per_minggu = [];
 
         for ($i = 0; $i < 7; $i++) {
-            $journal = Journal::where('tanggal', [DATE('Y-m-d', strtotime('-' . $i . 'days')), DATE('Y-m-d')])
+            $jurnal_guru = JurnalGuru::where('tanggal', [DATE('Y-m-d', strtotime('-' . $i . 'days')), DATE('Y-m-d')])
                 ->select([
                     DB::raw('siswa_hadir'),
                     DB::raw('siswa_tidak_hadir'),
@@ -38,14 +38,14 @@ class DashboardController extends Controller
                 ->get()
                 ->toArray();
 
-            array_push($journals_week, $journal);
+            array_push($jurnal_guru_per_minggu, $jurnal_guru);
         }
 
 
-        $journals_day = json_encode($journals_day);
-        $journals_week = json_encode($journals_week);
+        $jurnal_guru_per_hari = json_encode($jurnal_guru_per_hari);
+        $jurnal_guru_per_minggu = json_encode($jurnal_guru_per_minggu);
 
 
-        return view('admin/index', compact('journals', 'teachers', 'students', 'journals_day', 'journals_week'));
+        return view('admin/index', compact('jurnal_guru', 'guru', 'siswa', 'jurnal_guru_per_hari', 'jurnal_guru_per_minggu'));
     }
 }

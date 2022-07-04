@@ -1,0 +1,20 @@
+/* MULTI SELECT */
+
+.multiselect-container {
+    padding: 0.75rem;
+    height: 20rem;
+    width: 16rem;
+    overflow: scroll;
+}
+
+.multiselect-container li {
+    margin-bottom: 0.5rem;
+}
+
+.multiselect-container li label {
+    margin-bottom: 0;
+}
+
+.multiselect-container .multiselect-item.filter .input-group-btn {
+    display: none;
+}
