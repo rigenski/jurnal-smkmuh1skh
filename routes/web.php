@@ -60,6 +60,15 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::post('/admin/siswa/store', 'SiswaController@store')->name('admin.siswa.store');
     Route::post('/admin/siswa/{id}/update', 'SiswaController@update');
     Route::get('/admin/siswa/{id}/destroy', 'SiswaController@destroy');
+    Route::get('/admin/siswa/format-export', 'SiswaController@format_export');
+    Route::get('/admin/siswa/reset', 'SiswaController@reset');
+
+    Route::get('/admin/mata-pelajaran', 'MataPelajaranController@index')->name('admin.mata_pelajaran');
+    Route::post('/admin/mata-pelajaran/import', 'MataPelajaranController@import')->name('admin.mata_pelajaran.import');
+    Route::post('/admin/mata-pelajaran/store', 'MataPelajaranController@store')->name('admin.mata_pelajaran.store');
+    Route::post('/admin/mata-pelajaran/{id}/update', 'MataPelajaranController@update');
+    Route::get('/admin/mata-pelajaran/{id}/destroy', 'MataPelajaranController@destroy');
+    Route::get('/admin/mata-pelajaran/format-export', 'MataPelajaranController@format_export');
 
     Route::get('/admin/unit_kerja', 'UnitKerjaController@index')->name('admin.unit_kerja');
     Route::post('/admin/unit_kerja/store', 'UnitKerjaController@store')->name('admin.unit_kerja.store');

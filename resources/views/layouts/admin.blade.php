@@ -37,20 +37,25 @@
                         <span>Dashboard</span></a></li>
 
                 <li class="menu-header">Jurnal</li>
-                <li class="@yield('jurnal_guru.data')"><a class="nav-link" href="{{ route('admin.jurnal_guru') }}">
+                <li class="@yield('jurnal_guru')"><a class="nav-link" href="{{ route('admin.jurnal_guru') }}">
                         <i class="fas fa-book"></i>
                         <span>Jurnal Guru</span></a></li>
-                <li class="@yield('jurnal_karyawan.data')"><a class="nav-link"
-                        href="{{ route('admin.jurnal_karyawan') }}">
+                <li class="@yield('jurnal_karyawan')"><a class="nav-link" href="{{ route('admin.jurnal_karyawan') }}">
                         <i class="fas fa-book"></i>
                         <span>Jurnal Karyawan</span></a></li>
                 </li>
+                <li class="menu-header">Izin</li>
+                <li class="@yield('izin_guru')"><a class="nav-link" href="">
+                        <i class="fas fa-door-open"></i>
+                        <span>Izin Guru</span></a></li>
                 <li class="menu-header">Tambahan</li>
+                <li class="@yield('mata_pelajaran')"><a class="nav-link" href="{{ route('admin.mata_pelajaran') }}"><i
+                            class="fas fa-book"></i>
+                        <span>Mata Pelajaran</span></a></li>
                 <li class="@yield('unit_kerja')"><a class="nav-link" href="{{ route('admin.unit_kerja') }}"><i
                             class="fas fa-cog"></i>
                         <span>Unit Kerja</span></a></li>
-
-                <li class="menu-header">User</li>
+                    
                 <li class="@yield('siswa')"><a class="nav-link" href="{{ route('admin.siswa') }}"><i
                             class="fas fa-users"></i>
                         <span>Siswa</span></a></li>

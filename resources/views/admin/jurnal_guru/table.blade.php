@@ -12,6 +12,7 @@
             <th><b>SISWA TIDAK HADIR</b></th>
             <th><b>PERSENTASE</b></th>
             <th><b>DAFTAR SISWA TIDAK HADIR</b></th>
+            <th><b>CATATAN KHUSUS SISWA</b></th>
         </tr>
     </thead>
     <tbody>
@@ -29,10 +30,12 @@
                 <td>{{ $data->siswa_hadir }}</td>
                 <td>{{ $data->siswa_tidak_hadir }}</td>
                 <td>
-                    {{ number_format( ( $siswa->where('kelas', $data->kelas)->count() - $data->siswa_pilihan->count() ) / $siswa->where('kelas', $data->kelas)->count() * 100 )}}
+                    {{ number_format( ( $siswa->where('kelas', $data->kelas)->count() - $data->siswa_pilihan->count() )
+                    / $siswa->where('kelas', $data->kelas)->count() * 100 )}}
                     %
                 </td>
                 <td>{{ $siswa_pilihan->nama_siswa }}</td>
+                <td>{{ $data->catatan_siswa }}</td>
                 @else
                 <td></td>
                 <td></td>
@@ -45,6 +48,7 @@
                 <td></td>
                 <td></td>
                 <td>{{ $siswa_pilihan->nama_siswa }}</td>
+                <td></td>
                 @endif
         </tr>
         <?php $count++; ?>

@@ -8,7 +8,8 @@
             speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
         <h2 class="text-success">Terima Kasih ✨</h2>
         <p class="lead">
-            Selamat <span class="font-weight-bold text-primary">{{ auth()->user()->name }}</span> , data jurnal yang
+            Selamat <span class="font-weight-bold text-primary">{{ auth()->user()->name }}</span> , data {{
+            session('success') == 'jurnal' ? 'jurnal' : ( session('success') == 'izin' ? 'izin' : null ) }} yang
             anda kirim telah berhasil dikirim
         </p>
         @else
@@ -17,7 +18,7 @@
         <h2 class="text-danger">Silahkan Kembali 📑</h2>
         <p class="lead">
             Maaf <span class="font-weight-bold text-primary">{{ auth()->user()->name }}</span> , mohon isi formulir
-            data jurnal terlebih dahulu
+            data jurnal / izin terlebih dahulu
         </p>
         @endif
         <a href="{{ route('home') }}" class="btn btn-success mt-4">Kembali</a>

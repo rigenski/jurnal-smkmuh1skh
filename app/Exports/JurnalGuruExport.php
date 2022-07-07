@@ -6,9 +6,9 @@ use App\JurnalGuru;
 use App\Siswa;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-
-class JurnalGuruExport implements FromView
+class JurnalGuruExport implements FromView, ShouldAutoSize
 {
 
     public function view(): View

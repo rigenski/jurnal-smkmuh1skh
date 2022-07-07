@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(AktivitasGuru::class);
     }
+
+    public function aktivitas_guru_izin()
+    {
+        return $this->hasMany(AktivitasGuruIzin::class);
+    }
 }

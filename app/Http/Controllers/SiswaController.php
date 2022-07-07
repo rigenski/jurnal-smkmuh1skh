@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SiswaFormatExport;
 use App\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -79,5 +80,17 @@ class SiswaController extends Controller
         $siswa->delete();
 
         return redirect()->route('admin.siswa')->with('success', 'Data siswa berhasil dihapus');
+    }
+
+    public function format_export()
+    {
+        return Excel::download(new SiswaFormatExport(), 'import-siswa-jurnalmu' . '.xlsx');
+    }
+
+    public function reset()
+    {
+        Siswa::truncate();
+
+        return redirect()->route('admin.siswa')->with('success', 'Data siswa berhasil direset');
     }
 }

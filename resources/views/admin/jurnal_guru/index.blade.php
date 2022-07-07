@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 @section('jurnal_guru', 'active')
-@section('jurnal_guru.data', 'active')
 
 @section('title', 'Jurnal Guru')
 
