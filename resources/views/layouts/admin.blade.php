@@ -45,7 +45,7 @@
                         <span>Jurnal Karyawan</span></a></li>
                 </li>
                 <li class="menu-header">Izin</li>
-                <li class="@yield('izin_guru')"><a class="nav-link" href="">
+                <li class="@yield('izin_guru')"><a class="nav-link" href="{{ route('admin.izin_guru') }}">
                         <i class="fas fa-door-open"></i>
                         <span>Izin Guru</span></a></li>
                 <li class="menu-header">Tambahan</li>
@@ -55,7 +55,7 @@
                 <li class="@yield('unit_kerja')"><a class="nav-link" href="{{ route('admin.unit_kerja') }}"><i
                             class="fas fa-cog"></i>
                         <span>Unit Kerja</span></a></li>
-                    
+
                 <li class="@yield('siswa')"><a class="nav-link" href="{{ route('admin.siswa') }}"><i
                             class="fas fa-users"></i>
                         <span>Siswa</span></a></li>

@@ -40,6 +40,9 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
     Route::get('/admin/jurnal_guru', 'JurnalGuruController@index')->name('admin.jurnal_guru');
     Route::get('/admin/jurnal_guru/export', 'JurnalGuruController@export')->name('admin.jurnal_guru.export');
 
+    Route::get('/admin/izin_guru', 'IzinGuruController@index')->name('admin.izin_guru');
+    Route::get('/admin/izin_guru/export', 'IzinGuruController@export')->name('admin.izin_guru.export');
+
     Route::get('/admin/jurnal_karyawan', 'JurnalKaryawanController@index')->name('admin.jurnal_karyawan');
     Route::get('/admin/jurnal_karyawan/export', 'JurnalKaryawanController@export')->name('admin.jurnal_karyawan.export');
 

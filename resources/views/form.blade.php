@@ -359,7 +359,7 @@
                     <label for="surat_izin">8. Surat Izin <span class="text-danger"><b>*</b></span> </span></label>
                     <div class="custom-file">
                         <input type="file" class="custom-file-input @error('surat_izin') is-invalid @enderror"
-                            id="surat_izin" name="surat_izin">
+                            id="surat_izin" name="surat_izin" required>
                         <label class="custom-file-label mt-2" for="surat_izin">Pilih Dokumen / Foto</label>
                     </div>
                     @error('surat_izin')

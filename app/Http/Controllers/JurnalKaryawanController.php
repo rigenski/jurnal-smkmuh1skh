@@ -66,6 +66,8 @@ class JurnalKaryawanController extends Controller
 
     public function export()
     {
-        return Excel::download(new JurnalKaryawanExport(), 'jurnalmu_karyawan_' . date('Y-m-d h:i:s') . '.xlsx');
+        $search1 = session()->get('search1');
+
+        return Excel::download(new JurnalKaryawanExport(), 'Jurnal Karyawan SMK Muhammadiyah 1 Sukoharjo - ' . $search1 . '.xlsx');
     }
 }
