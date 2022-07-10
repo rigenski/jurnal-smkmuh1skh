@@ -10,7 +10,7 @@
             <div class="d-flex align-items-start flex-column">
                 <form action="{{ route('admin.izin_guru') }}" method="get" class="d-flex">
                     <input type="text" class="form-control datepicker" name="tanggal" autocomplete="off"
-                        value="{{ $tanggal }}">
+                        value="{{ $tanggal ? $tanggal : date('Y-m-d') }}">
                     <div class="mx-2">
                         <button class="btn btn-primary ">Cari</button>
                     </div>

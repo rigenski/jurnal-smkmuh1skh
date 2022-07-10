@@ -1,9 +1,9 @@
 <table>
     <thead>
         <tr>
-            <th scope="col">JAM</th>
+            <th scope="col"><b>JAM</b></th>
             @foreach($data_kelas as $kelas)
-            <th>{{ $kelas->kelas }}</th>
+            <th><b>{{ $kelas->kelas }}</b></th>
             @endforeach
         </tr>
     </thead>
@@ -11,7 +11,7 @@
         @foreach($data_jam as $jam)
 
         <tr>
-            <th scopre="row">{{ $jam }}</th>
+            <th scopre="row"><b>{{ $jam }}</b></th>
 
             @foreach($data_kelas as $kelas)
 

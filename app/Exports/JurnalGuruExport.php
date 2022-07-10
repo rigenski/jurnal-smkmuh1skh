@@ -7,9 +7,14 @@ use App\Siswa;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class JurnalGuruExport implements FromView, ShouldAutoSize
+class JurnalGuruExport implements FromView, ShouldAutoSize, WithTitle
 {
+    public function title(): string
+    {
+        return 'List Jurnal Guru';
+    }
 
     public function view(): View
     {

@@ -36,7 +36,7 @@
                     </a>
                     @if($input1 !== null || $input2 !== null)
                     <div class="mx-2">
-                        <a href="{{ route('admin.jurnal_karyawan.export') }}" class="btn btn-success">Export Semua</a>
+                        <a href="{{ route('admin.jurnal_karyawan.export') }}" class="btn btn-success">Export</a>
                     </div>
                     @endif
                 </div>
