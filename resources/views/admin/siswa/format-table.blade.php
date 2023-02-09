@@ -1,0 +1,9 @@
+<table>
+  <thead>
+    <tr>
+      <th><b>NIS</b></th>
+      <th><b>NAMA</b></th>
+      <th><b>KELAS</b></th>
+    </tr>
+  </thead>
+</table>
