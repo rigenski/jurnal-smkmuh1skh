@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 {{-- GURU --}}
+{{--  --}}
 
 @if(auth()->user()->role == 'guru')
 @section('main')
