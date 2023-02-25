@@ -20,21 +20,24 @@ use Illuminate\Support\Str;
 
 class FrontController extends Controller
 {
-    public function index()
+    public function index () {
+        return view('index');
+    }
+
+    public function jurnalIndex()
     {
         date_default_timezone_set("Asia/Jakarta");
 
         if (auth()->user()->role == 'guru') {
             $time = Carbon::now();
             $aktivitas_jurnal_guru = AktivitasGuru::where("user_id", auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
-            $aktivitas_izin_guru = AktivitasGuruIzin::where("user_id", auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
             $siswa = Siswa::all();
             $user = Guru::where('user_id', auth()->user()->id)->get();
             $user = $user[0];
 
             $mata_pelajaran = MataPelajaran::all();
 
-            return view('form', compact('time', 'aktivitas_jurnal_guru', 'aktivitas_izin_guru', 'siswa', 'user', 'mata_pelajaran'));
+            return view('jurnal', compact('time', 'aktivitas_jurnal_guru', 'siswa', 'user', 'mata_pelajaran'));
         }
 
         if (auth()->user()->role == 'karyawan') {
@@ -44,7 +47,24 @@ class FrontController extends Controller
             $user = Karyawan::where('user_id', auth()->user()->id)->get();
             $user = $user[0];
 
-            return view('form', compact('time', 'aktivitas_karyawan', 'unit_kerja', 'user'));
+            return view('jurnal', compact('time', 'aktivitas_karyawan', 'unit_kerja', 'user'));
+        }
+    }
+
+    public function izinIndex()
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'guru') {
+            $time = Carbon::now();
+            $aktivitas_izin_guru = AktivitasGuruIzin::where("user_id", auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
+            $siswa = Siswa::all();
+            $user = Guru::where('user_id', auth()->user()->id)->get();
+            $user = $user[0];
+
+            $mata_pelajaran = MataPelajaran::all();
+
+            return view('index', compact('time', 'aktivitas_jurnal_guru', 'aktivitas_izin_guru', 'siswa', 'user', 'mata_pelajaran'));
         }
     }
 

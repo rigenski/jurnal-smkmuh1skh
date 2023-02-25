@@ -29,6 +29,8 @@ Route::group(['middleware' => ['auth', 'checkRole:admin,guru,karyawan']], functi
 
 Route::group(['middleware' => ['auth', 'checkRole:guru,karyawan']], function () {
     Route::get('/', 'FrontController@index')->name('home');
+    Route::get('/jurnal', 'FrontController@jurnalIndex')->name('jurnal');
+    Route::get('/izin', 'FrontController@izinIndex')->name('izin');
     Route::post('/create', 'FrontController@create')->name('create');
     Route::get('/congrats', 'FrontController@congrats')->name('congrats');
 });
