@@ -34,7 +34,7 @@
                     / $siswa->where('kelas', $data->kelas)->count() * 100 )}}
                     %
                 </td>
-                <td>{{ $siswa_pilihan->nama_siswa }}</td>
+                <td>{{ $siswa_pilihan->nama_siswa }} ({{ $siswa_pilihan->status }})</td>
                 <td>{{ $data->catatan_siswa }}</td>
                 @else
                 <td></td>
@@ -47,7 +47,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{ $siswa_pilihan->nama_siswa }}</td>
+                <td>{{ $siswa_pilihan->nama_siswa }} ({{ $siswa_pilihan->status }})</td>
                 <td></td>
                 @endif
         </tr>

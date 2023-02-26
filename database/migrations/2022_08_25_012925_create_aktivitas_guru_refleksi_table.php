@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAktivitasRefleksiGuruTable extends Migration
+class CreateAktivitasGuruRefleksiTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAktivitasRefleksiGuruTable extends Migration
      */
     public function up()
     {
-        Schema::create('aktivitas_refleksi_guru', function (Blueprint $table) {
+        Schema::create('aktivitas_guru_refleksi', function (Blueprint $table) {
             $table->id();
             $table->foreignId('refleksi_guru_id')->constrained('refleksi_guru');
             $table->foreignId('user_id')->constrained('users');
@@ -28,6 +28,6 @@ class CreateAktivitasRefleksiGuruTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('aktivitas_refleksi_guru');
+        Schema::dropIfExists('aktivitas_guru_refleksi');
     }
 }

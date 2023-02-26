@@ -17,7 +17,7 @@
       property="og:description"
       content="SIM Sekolah - SMK Muhammadiyah 1 Sukoharjo"
     />
-    <title>Jurnal Guru - SMK Muhammadiyah 1 Sukoharjo</title>
+    <title>Jurnal - SMK Muhammadiyah 1 Sukoharjo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -31,7 +31,8 @@
       }
     </style>
 </head>
-<body>
+<body class="bg-gray-50">
     @yield('main')
+    @yield('script')
 </body>
 </html>

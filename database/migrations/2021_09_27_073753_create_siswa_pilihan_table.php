@@ -16,6 +16,7 @@ class CreateSiswaPilihanTable extends Migration
         Schema::create('siswa_pilihan', function (Blueprint $table) {
             $table->id();
             $table->string('nama_siswa');
+            $table->string('status');
             $table->foreignId('jurnal_guru_id')->constrained('jurnal_guru');
             $table->timestamps();
         });

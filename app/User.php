@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(AktivitasGuruIzin::class);
     }
+
+    public function aktivitas_guru_refleksi()
+    {
+        return $this->hasMany(AktivitasGuruRefleksi::class);
+    }
 }

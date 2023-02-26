@@ -31,7 +31,10 @@ Route::group(['middleware' => ['auth', 'checkRole:guru,karyawan']], function () 
     Route::get('/', 'FrontController@index')->name('home');
     Route::get('/jurnal', 'FrontController@jurnalIndex')->name('jurnal');
     Route::get('/izin', 'FrontController@izinIndex')->name('izin');
-    Route::post('/create', 'FrontController@create')->name('create');
+    Route::get('/refleksi', 'FrontController@refleksiIndex')->name('refleksi');
+    Route::post('/jurnal/store', 'FrontController@jurnalStore')->name('jurnal.store');
+    Route::post('/izin/store', 'FrontController@izinStore')->name('izin.store');
+    Route::post('/refleksi/store', 'FrontController@refleksiStore')->name('refleksi.store');
     Route::get('/congrats', 'FrontController@congrats')->name('congrats');
 });
 
@@ -44,6 +47,9 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {
 
     Route::get('/admin/izin_guru', 'IzinGuruController@index')->name('admin.izin_guru');
     Route::get('/admin/izin_guru/export', 'IzinGuruController@export')->name('admin.izin_guru.export');
+
+    Route::get('/admin/refleksi_guru', 'RefleksiGuruController@index')->name('admin.refleksi_guru');
+    Route::get('/admin/refleksi_guru/export', 'RefleksiGuruController@export')->name('admin.refleksi_guru.export');
 
     Route::get('/admin/jurnal_karyawan', 'JurnalKaryawanController@index')->name('admin.jurnal_karyawan');
     Route::get('/admin/jurnal_karyawan/export', 'JurnalKaryawanController@export')->name('admin.jurnal_karyawan.export');

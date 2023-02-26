@@ -4,7 +4,7 @@
 
 @if(auth()->user()->role == 'guru')
 @section('main')
-    <nav class="w-full z-40 py-2">
+<nav class="w-full z-40 py-2">
         <div class="flex justify-center">
             <div class="container max-w-6xl px-4">
                 <div class="flex justify-between items-center">
@@ -20,7 +20,7 @@
         </div>
     </nav>
     <main class="-mt-[56px]">
-        <div class="w-full h-80 bg-gradient-to-br from-blue-500 to-blue-700"></div>
+        <div class="w-full h-80 bg-gradient-to-br from-amber-500 to-amber-700"></div>
         <div class="-mt-64 pb-24 flex justify-center md:-mt-56">
             <div class="container px-4 max-w-2xl">
                 <div>
@@ -30,9 +30,9 @@
                             <span class="ml-2">Kembali</span>
                         </a>
                     </div>
-                    <form class="p-4 w-full max-w-2xl bg-white rounded-lg shadow-lg md:p-8" action="{{ route('jurnal.store')}}" method="post"  enctype="multipart/form-data">
+                    <form class="p-4 w-full max-w-2xl bg-white rounded-lg shadow-lg md:p-8" action="{{ route('izin.store')}}" method="post" enctype="multipart/form-data">
                         {{ csrf_field() }}
-                        <h4 class="mb-2 text-3xl font-semibold text-gray-800">Jurnal Guru</h4>
+                        <h4 class="mb-2 text-3xl font-semibold text-gray-800">Izin Guru</h4>
                         <p class="mb-8 text-base font-normal text-gray-600">Semester {{ date('n') <= 6 ? 'Genap' : 'Ganjil' }} <br /> Tahun
                             Pelajaran @if(date('n')>= 1 && date('n') <= 6 ) {{ ( intval(date('Y')) - 1 ) . ' / ' . (
                                 intval(date('Y')) ) }} @elseif(date('n')>= 6 &&
@@ -53,8 +53,20 @@
                             </div> --}}
                             <div class="w-full">
                                 <div class="mb-2 flex flex-col md:mb-4">
+                                    <label class="mb-2 text-sm font-light text-gray-600" for="jenis_izin">
+                                        1. Jenis Izin  <span class="text-red-600">*</span>
+                                    </label>
+                                    <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="jenis_izin" name="jenis_izin" required>
+                                        <option value="">-- Pilih --</option>
+                                        <option>Dinas</option>
+                                        <option>Non Dinas</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <div class="mb-2 flex flex-col md:mb-4">
                                     <label class="mb-2 text-sm font-light text-gray-600" to="kelas_container">
-                                        1. Kelas <span class="text-red-600">*</span>
+                                        2. Kelas <span class="text-red-600">*</span>
                                     </label>
                                     <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="kelas_container"
                                     name="kelas_container" required>
@@ -73,7 +85,7 @@
                             <div class="w-full">
                                 <div class="mb-2 flex flex-col md:mb-4">
                                     <label class="mb-2 text-sm font-light text-gray-600" for="jam_ke">
-                                        2. Mengajar Jam Ke-  <span class="text-red-600">*</span>
+                                        3. Mengajar Jam Ke-  <span class="text-red-600">*</span>
                                     </label>
                                     <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="jam_ke" name="jam_ke" required>
                                         <option value="">-- Pilih --</option>
@@ -96,83 +108,79 @@
                             <div class="w-full">
                                 <div class="mb-2 flex flex-col md:mb-4">
                                     <label class="mb-2 text-sm font-light text-gray-600" for="sampai_jam_ke">
-                                        3. Sampai Jam Ke-  <span class="text-red-600">*</span>
+                                        4. Sampai Jam Ke-  <span class="text-red-600">*</span>
                                     </label>
                                     <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="sampai_jam_ke"
                                     name="sampai_jam_ke" required>
-                                        <option value="">-- Pilih --</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                        <option>6</option>
-                                        <option>7</option>
-                                        <option>8</option>
-                                        <option>9</option>
-                                        <option>10</option>
-                                        <option>11</option>
-                                        <option>12</option>
-                                        <option>13</option>
+                                    <option value="">-- Pilih --</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
                                     </select>
                                     <small class="mt-2 text-xs font-normal text-gray-400">Pilih Jam yang sama jika hanya mengajar 1 Jam</small>
                                 </div>
                             </div>
                             <div class="w-full">
                                 <div class="mb-2 flex flex-col md:mb-4">
-                                    <label class="mb-2 text-sm font-light text-gray-600" for="mata_pelajaran">
-                                        4. Mata Pelajaran  <span class="text-red-600">*</span>
-                                    </label>
-                                    <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="mata_pelajaran"
-                                    name="mata_pelajaran" required>
-                                        <option value="">-- Pilih --</option>
-                                        @foreach($mata_pelajaran as $data)
-                                        <option>{{ $data->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="w-full">
-                                <div class="mb-2 flex flex-col md:mb-4">
-                                    <label class="mb-2 text-sm font-light text-gray-600" for="deskripsi">
-                                        5. Deskripsi kegiatan belajar mengajar <span class="text-red-600">*</span>
+                                    <label class="mb-2 text-sm font-light text-gray-600" for="ruang">
+                                        5. Ruang <span class="text-red-600">*</span>
                                     </label>
                                     <input
                                     type="text"
                                     class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md"
-                                    id="deskripsi"
-                                    name="deskripsi"
+                                    id="ruang"
+                                    name="ruang"
                                     required
                                     />
                                 </div>
                             </div>
                             <div class="w-full">
                                 <div class="mb-2 flex flex-col md:mb-4">
-                                    <label class="mb-2 text-sm font-light text-gray-600" for="siswa">
-                                        6. Absensi Siswa <span class="text-red-600">*</span>
+                                    <label class="mb-2 text-sm font-light text-gray-600" for="petunjuk_tugas">
+                                        6. Petunjuk Tugas
                                     </label>
-                                    <div id="siswa">
-                                        <div class="flex justify-center">
-                                            <p class="text-base font-normal text-gray-800 mx-4">Tidak Ada Data</p>
-                                        </div>
-                                    </div>
+                                    <input
+                                    type="text"
+                                    class="mb-2 border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md"
+                                    id="petunjuk_tugas"
+                                    name="petunjuk_tugas"
+                                    />
+                                    <input
+                                    type="file"
+                                    class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md"
+                                    id="petunjuk_tugas_file"
+                                    name="petunjuk_tugas_file"
+                                    />
+                                    <small class="mt-2 text-xs font-normal text-gray-400">Ukuran maksimal 5Mb</small>
                                 </div>
                             </div>
                             <div class="w-full">
                                 <div class="mb-2 flex flex-col md:mb-4">
-                                    <label class="mb-2 text-sm font-light text-gray-600" for="catatan_siswa">
-                                        7. Catatan Khusus Siswa
+                                    <label class="mb-2 text-sm font-light text-gray-600" for="surat_izin">
+                                        7. Surat Izin <span class="text-red-600">*</span>
                                     </label>
                                     <input
-                                    type="text"
+                                    type="file"
                                     class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md"
-                                    id="catatan_siswa" name="catatan_siswa"
+                                    id="surat_izin"
+                                    name="surat_izin"
+                                    required
                                     />
-                                    <small class="mt-2 text-xs font-normal text-gray-400">Contoh Penulisan : Siswa yang bernama Ahmad tidak masuk 3 kali berturut turut</small>
+                                    <small class="mt-2 text-xs font-normal text-gray-400">Ukuran maksimal 5Mb</small>
                                 </div>
                             </div>
                             <div class="flex justify-end mt-8">
-                                <button type="submit" class="min-w-[140px] bg-gradient-to-br from-blue-500 to-blue-700 px-2 py-2 text-base font-bold text-[#FDFDFD] rounded" >
+                                <button type="submit" class="min-w-[140px] bg-gradient-to-br from-amber-500 to-amber-700 px-2 py-2 text-base font-bold text-[#FDFDFD] rounded" >
                                     KIRIM
                                 </button>
                             </div>
@@ -185,106 +193,90 @@
 
 
 @section('script')
-    <script>
-        // data from laravel
-        const data = @json($siswa);
-        
-        // declare element variable
-        let elKelasContainer = document.getElementById('kelas_container');
-        let elKelas = document.getElementById('kelas');
-        let elSiswa = document.getElementById('siswa');
-        
-        // data array
-        let classX = [];
-        let classXI = [];
-        let classXII = [];
+<script>
+    // data from laravel
+    const data = @json($siswa);
+    
+    // declare element variable
+    let elKelasContainer = document.getElementById('kelas_container');
+    let elKelas = document.getElementById('kelas');
+    let elSiswa = document.getElementById('siswa');
+    
+    // data array
+    let classX = [];
+    let classXI = [];
+    let classXII = [];
 
-        // init kelas to array 
-        const setKelas = () => {
-            data.map((x, i) => {
-                const kelas = x.kelas.split(' / ');
+    // init kelas to array 
+    const setKelas = () => {
+        data.map((x, i) => {
+            const kelas = x.kelas.split(' / ');
 
-                if(kelas[0] == 'X') {
-                    classX.push(x.kelas);
-                } else if(kelas[0] == 'XI') {
-                    classXI.push(x.kelas);
-                } else if(kelas[0] == 'XII') {
-                    classXII.push(x.kelas);
-                }
-            })
-            
-            const array_unnique = (value, index, self) => {
-                return self.indexOf(value) === index;
+            if(kelas[0] == 'X') {
+                classX.push(x.kelas);
+            } else if(kelas[0] == 'XI') {
+                classXI.push(x.kelas);
+            } else if(kelas[0] == 'XII') {
+                classXII.push(x.kelas);
             }
-
-            classX = classX.filter(array_unnique);
-            classXI = classXI.filter(array_unnique);
-            classXII = classXII.filter(array_unnique);
-        }
-
-        // if kelas on change
-        const changeKelas = (value) => {
-            const kelasValue = elKelasContainer.value;
-
-            elKelas.innerHTML = '';
-
-            if(kelasValue == 'X') {
-                classX.map((x) => {
-                    elKelas.innerHTML += `<option>${x}</option>`
-                })
-            } else if(kelasValue == 'XI') {
-                classXI.map((x) => {
-                    elKelas.innerHTML += `<option>${x}</option>`
-                })
-            } else if(kelasValue == 'XII') {
-                classXII.map((x) => {
-                    elKelas.innerHTML += `<option>${x}</option>`
-                })
-            }
-
-            changeSiswa();
-        }
-
-        // if siswa on change
-        const changeSiswa = () => {
-            let siswa = [];
-
-            data.map((x, i) => {
-                const kelas = x.kelas.split(' / ');
-                
-                if(elKelas.value == x.kelas) {
-                    siswa.push(x);
-                }
-            })
-
-            elSiswa.innerHTML = '';
-
-            siswa.map((x) => {
-                elSiswa.innerHTML += `<div class="mx-4 py-0.5 flex justify-between border-t-2 border-b-2 border-gray-50">
-                                            <p class="mr-2 text-base font-normal text-gray-800">- ${x.nama}</p>
-                                            <select class="px-2 py-0.5 text-base font-normal text-gray-800" id="siswa[]" name="siswa[]">
-                                                <option value='${x.id}-Hadir'>Hadir</option>
-                                                <option value='${x.id}-Izin'>Izin</option>
-                                                <option value='${x.id}-Sakit'>Sakit</option>
-                                                <option value='${x.id}-Alfa'>Alfa</option>
-                                            </select>
-                                        </div>`
-            });
-        }
+        })
         
-
-        elKelasContainer.addEventListener('change', () => {
-            changeKelas();
-        })
-
-        elKelas.addEventListener('change', () => {
-            changeSiswa();
-        })
-
-        window.onload = () => {
-            setKelas();
+        const array_unnique = (value, index, self) => {
+            return self.indexOf(value) === index;
         }
 
-    </script>
+        classX = classX.filter(array_unnique);
+        classXI = classXI.filter(array_unnique);
+        classXII = classXII.filter(array_unnique);
+    }
+
+    // if kelas on change
+    const changeKelas = (value) => {
+        const kelasValue = elKelasContainer.value;
+
+        elKelas.innerHTML = '';
+
+        if(kelasValue == 'X') {
+            classX.map((x) => {
+                elKelas.innerHTML += `<option>${x}</option>`
+            })
+        } else if(kelasValue == 'XI') {
+            classXI.map((x) => {
+                elKelas.innerHTML += `<option>${x}</option>`
+            })
+        } else if(kelasValue == 'XII') {
+            classXII.map((x) => {
+                elKelas.innerHTML += `<option>${x}</option>`
+            })
+        }
+    }
+    
+
+    elKelasContainer.addEventListener('change', () => {
+        changeKelas();
+    })
+
+    window.onload = () => {
+        setKelas();
+    }
+    
+    var petunjukTugasFile = document.getElementById("petunjuk_tugas_file");
+    var suratIzin = document.getElementById("surat_izin");
+
+    petunjukTugasFile.onchange = function() {
+        if(this.files[0].size > 500000){
+           alert("Dokumen / Foto terlalu besar!");
+           this.value = "";
+        };
+    };
+    
+    suratIzin.onchange = function() {
+        if(this.files[0].size > 500000){
+           alert("Dokumen / Foto terlalu besar!");
+           this.value = "";
+        };
+    };
+
+</script>
 @endsection
 @endif

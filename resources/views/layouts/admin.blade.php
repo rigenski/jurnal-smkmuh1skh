@@ -36,7 +36,7 @@
                             class="fas fa-home"></i>
                         <span>Dashboard</span></a></li>
 
-                <li class="menu-header">Jurnal</li>
+                <li class="menu-header">MENU</li>
                 <li class="@yield('jurnal_guru')"><a class="nav-link" href="{{ route('admin.jurnal_guru') }}">
                         <i class="fas fa-book"></i>
                         <span>Jurnal Guru</span></a></li>
@@ -44,10 +44,12 @@
                         <i class="fas fa-book"></i>
                         <span>Jurnal Karyawan</span></a></li>
                 </li>
-                <li class="menu-header">Izin</li>
                 <li class="@yield('izin_guru')"><a class="nav-link" href="{{ route('admin.izin_guru') }}">
                         <i class="fas fa-door-open"></i>
                         <span>Izin Guru</span></a></li>
+                <li class="@yield('refleksi_guru')"><a class="nav-link" href="{{ route('admin.refleksi_guru') }}">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Refleksi Guru</span></a></li>
                 <li class="menu-header">Tambahan</li>
                 <li class="@yield('mata_pelajaran')"><a class="nav-link" href="{{ route('admin.mata_pelajaran') }}"><i
                             class="fas fa-book"></i>
