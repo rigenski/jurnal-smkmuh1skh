@@ -8,7 +8,7 @@
               <a href={{ route('home') }} class="text-xl font-semibold text-white lg:text-2xl">
                 SiMa-Ku
               </a>
-              <a href={{ route('logout') }} class="flex items-center text-sm font-normal text-[#FDFDFD] md:text-base" id="modal-open">
+              <a href={{ route('logout') }} class="flex items-center text-sm font-normal text-white md:text-base" id="modal-open">
                 <span class="mr-2">Keluar</span>
                 <div class="h-5 w-5 md:h-6 md:w-6">
                   <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24"><path fill="currentColor" d="m12 20l-1.425-1.4l5.6-5.6H4v-2h12.175l-5.6-5.6L12 4l8 8l-8 8Z"/></svg>
@@ -18,11 +18,9 @@
       </div>
   </div>
 </nav>
-<main class="-mt-[64px]">
-  <div> 
-    <img src="{{asset('/img/bg-app.png')}}" alt="" class="w-full h-[480px] object-cover object-bottom" >
-  </div>
-  <div class="-mt-[400px] pb-24 flex justify-center md:-mt-[320px] relative">
+<main class="-mt-[60px] md:-mt-[64px]">
+  <div class="w-full h-[480px] bg-gradient-to-br from-indigo-500 to-indigo-700"></div>
+  <div class="-mt-[400px] pb-24 flex justify-center md:-mt-[360px]">
       <div class="container px-4 max-w-6xl">
           <div class="-mx-0 flex flex-wrap md:-mx-4">
             <div class="mb-8 w-full px-0 md:w-6/12 md:mb-0 md:px-4">
@@ -30,13 +28,13 @@
                 <p class="mb-4 max-w-md text-base font-medium text-white md:text-base">Hi, {{ auth()->user() ->role === 'guru' ? auth()->user()->guru->nama : auth()->user()->karyawan->nama }}</p>
                 <h2 class="mb-2 text-3xl font-bold text-white lg:text-5xl">Layanan</h2>
                 <h2 class="mb-4 text-3xl font-bold text-white lg:text-5xl">Simaku Jurnal</h2>
-                <p class="max-w-md text-sm font-normal text-white md:text-base">Sivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Nulla quis lorem ut libero malesuada feugiat. Vestibulum ac</p>
+                <p class="max-w-md text-sm font-normal text-white md:text-base">Menyediakan berbagai layanan untuk kebutuhan kurikulum guna mempermudah aktifitas guru dan karyawan dalam kegiatan belajar mengajar.</p>
               </div>
             </div>
             <div class="mb-8 w-full px-0 md:w-6/12 md:mb-0 md:px-4">
               @if(auth()->user() ->role === 'guru')
               <div class="flex flex-wrap -mx-2">
-                <div class="w-6/12 px-2 mb-4">
+                <div class="w-6/12 p-2">
                   <a href="{{ route('jurnal') }}" class="w-full">
                     <div class="p-4 bg-white rounded-lg w-full flex flex-col justify-center items-center shadow-lg">
                       <div class="mb-2 p-2 h-12 w-12 bg-gradient-to-br from-emerald-500 to-emerald-700 flex justify-center items-center rounded-full">
@@ -48,7 +46,7 @@
                     </div>
                   </a>
                 </div>
-                <div class="w-6/12 px-2 mb-4">
+                <div class="w-6/12 p-2">
                   <a href="{{ route('izin') }}" class="w-full">
                     <div class="p-4 bg-white rounded-lg w-full flex flex-col justify-center items-center shadow-lg">
                       <div class="mb-2 p-2 h-12 w-12 bg-gradient-to-br from-amber-500 to-amber-700 flex justify-center items-center rounded-full">
@@ -60,7 +58,7 @@
                     </div>
                   </a>
                 </div>
-                <div class="w-6/12 px-2 mb-4">
+                <div class="w-6/12 p-2">
                   <a href="{{ route('refleksi') }}" class="w-full">
                     <div class="p-4 bg-white rounded-lg w-full flex flex-col justify-center items-center shadow-lg">
                       <div class="mb-2 p-2 h-12 w-12 bg-gradient-to-br from-cyan-500 to-cyan-700 flex justify-center items-center rounded-full">
@@ -75,7 +73,7 @@
               <div>
               @else
               <div class="flex flex-wrap -mx-2">
-                <div class="w-6/12 px-2 mb-4">
+                <div class="w-6/12 p-2">
                   <a href="{{ route('jurnal') }}" class="w-full">
                     <div class="p-4 bg-white rounded-lg w-full flex flex-col justify-center items-center shadow-lg">
                       <div class="mb-2 p-2 h-12 w-12 bg-gradient-to-br from-emerald-500 to-emerald-700 flex justify-center items-center rounded-full">

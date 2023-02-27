@@ -36,7 +36,7 @@
       <div>
         @yield('main')
       </div>
-      <nav class="w-full py-4 md:py-8">
+      <footer class="w-full py-4 md:py-8">
         <div class="flex justify-center">
             <div class="container max-w-6xl px-4">
               <div class="flex justify-center">
@@ -44,7 +44,7 @@
               </div>
             </div>
           </div>
-        </nav>
+        </footer>
     </div>
   
   @yield('modal')

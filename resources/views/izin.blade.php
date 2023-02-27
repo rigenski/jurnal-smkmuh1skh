@@ -11,10 +11,10 @@
                     <a href={{ route('home') }} class="text-xl font-semibold text-white lg:text-2xl">
                         SiMa-Ku
                     </a>
-                    <button class="flex items-center text-sm font-normal text-[#FDFDFD] md:text-base" id="modal-open">
+                    <button class="flex items-center text-sm font-normal text-white md:text-base" id="modal-open">
                         <span class="mr-2">History</span>
                         <div class="h-5 w-5 md:h-6 md:w-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" class="text-[#FDFDFD]"><path fill="currentColor" d="m13 11.6l2.5 2.5q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275l-2.8-2.8q-.15-.15-.225-.337T11 11.975V8q0-.425.288-.713T12 7q.425 0 .713.288T13 8v3.6ZM12 21q-3.025 0-5.425-1.788T3.35 14.55q-.125-.45.088-.85t.662-.5q.425-.1.763.188t.462.712q.65 2.2 2.513 3.55T12 19q2.925 0 4.963-2.038T19 12q0-2.925-2.038-4.963T12 5q-1.725 0-3.225.8T6.25 8H8q.425 0 .713.288T9 9q0 .425-.288.713T8 10H4q-.425 0-.713-.288T3 9V5q0-.425.288-.713T4 4q.425 0 .713.288T5 5v1.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924q1.212 1.213 1.925 2.85T21 12q0 1.875-.713 3.513t-1.924 2.85q-1.213 1.212-2.85 1.925T12 21Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" class="text-white"><path fill="currentColor" d="m13 11.6l2.5 2.5q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275l-2.8-2.8q-.15-.15-.225-.337T11 11.975V8q0-.425.288-.713T12 7q.425 0 .713.288T13 8v3.6ZM12 21q-3.025 0-5.425-1.788T3.35 14.55q-.125-.45.088-.85t.662-.5q.425-.1.763.188t.462.712q.65 2.2 2.513 3.55T12 19q2.925 0 4.963-2.038T19 12q0-2.925-2.038-4.963T12 5q-1.725 0-3.225.8T6.25 8H8q.425 0 .713.288T9 9q0 .425-.288.713T8 10H4q-.425 0-.713-.288T3 9V5q0-.425.288-.713T4 4q.425 0 .713.288T5 5v1.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924q1.212 1.213 1.925 2.85T21 12q0 1.875-.713 3.513t-1.924 2.85q-1.213 1.212-2.85 1.925T12 21Z"/></svg>
                         </div>
                     </button>
                 </div>
@@ -22,12 +22,12 @@
         </div>
     </nav>
     <main class="-mt-[60px] md:-mt-[64px]">
-        <div class="w-full h-80 bg-gradient-to-br from-indigo-500 to-indigo-700"></div>
-        <div class="-mt-64 pb-24 flex justify-center md:-mt-56">
+        <div class="w-full h-[480px] bg-gradient-to-br from-indigo-500 to-indigo-700"></div>
+       <div class="-mt-[400px] pb-24 flex justify-center md:-mt-[360px]">
             <div class="container px-4 max-w-2xl">
                 <div>
                     <div class="flex justify-start mb-4">
-                        <a href={{ route('home') }} class="py-2 flex items-center text-base font-normal text-[#FDFDFD]">
+                        <a href={{ route('home') }} class="flex items-center text-base font-normal text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 20l-8-8l8-8l1.425 1.4l-5.6 5.6H20v2H7.825l5.6 5.6L12 20Z" class="text-white"/></svg>
                             <span class="ml-2">Kembali</span>
                         </a>
@@ -78,7 +78,7 @@
                                         <option>XII</option>
                                     </select>
                                     <small class="mt-2 text-xs font-normal text-gray-400">Pilih Tingkat</small>
-                                    <select class="mt-2 border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="kelas" name="kelas">
+                                    <select class="mt-2 border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="kelas" name="kelas" required>
                                         <option value="">-- Pilih --</option>
                                     </select>
                                     <small class="mt-2 text-xs font-normal text-gray-400">Pilih Kelas</small>
@@ -182,7 +182,7 @@
                                 </div>
                             </div>
                             <div class="flex justify-end mt-8">
-                                <button type="submit" class="min-w-[140px] bg-indigo-600 px-2 py-2 text-base font-bold text-[#FDFDFD] rounded" >
+                                <button type="submit" class="min-w-[140px] bg-indigo-600 px-2 py-2 text-base font-bold text-white rounded" >
                                     KIRIM
                                 </button>
                             </div>
