@@ -44,12 +44,12 @@ class FrontController extends Controller
 
         if (auth()->user()->role == 'karyawan') {
             $time = Carbon::now();
-            $aktivitas_karyawan = Aktivitaskaryawan::where("user_id", auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
+            $aktivitas_jurnal_karyawan = Aktivitaskaryawan::where("user_id", auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
             $unit_kerja = UnitKerja::all();
             $user = Karyawan::where('user_id', auth()->user()->id)->get();
             $user = $user[0];
 
-            return view('jurnal', compact('time', 'aktivitas_karyawan', 'unit_kerja', 'user'));
+            return view('jurnal', compact('time', 'aktivitas_jurnal_karyawan', 'unit_kerja', 'user'));
         }
     }
 

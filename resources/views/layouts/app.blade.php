@@ -32,7 +32,22 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    @yield('main')
-    @yield('script')
+    <div class="min-h-screen flex flex-col justify-between">
+      <div>
+        @yield('main')
+      </div>
+      <nav class="w-full py-4 md:py-8">
+        <div class="flex justify-center">
+            <div class="container max-w-6xl px-4">
+              <div class="flex justify-center">
+                <p class="text-sm font-normal text-gray-600 text-center lg:text-base">&copy; Copyright - SMK Muhammadiyah 1 Sukoharjo</p>
+              </div>
+            </div>
+          </div>
+        </nav>
+    </div>
+  
+  @yield('modal')
+  @yield('script')
 </body>
 </html>

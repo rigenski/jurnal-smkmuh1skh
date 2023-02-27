@@ -8,9 +8,12 @@
               <a href={{ route('home') }} class="text-xl font-semibold text-white lg:text-2xl">
                 SiMa-Ku
               </a>
-              <p class="text-base font-semibold text-white">
-                Hi, {{ auth()->user()->guru->nama }}
-              </p>
+              <a href={{ route('logout') }} class="flex items-center text-sm font-normal text-[#FDFDFD] md:text-base" id="modal-open">
+                <span class="mr-2">Keluar</span>
+                <div class="h-5 w-5 md:h-6 md:w-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24"><path fill="currentColor" d="m12 20l-1.425-1.4l5.6-5.6H4v-2h12.175l-5.6-5.6L12 4l8 8l-8 8Z"/></svg>
+                </div>
+            </a>
           </div>
       </div>
   </div>
@@ -21,20 +24,22 @@
   </div>
   <div class="-mt-[400px] pb-24 flex justify-center md:-mt-[320px] relative">
       <div class="container px-4 max-w-6xl">
-          <div class="-mx-0 flex flex-wrap md:-mx-8">
-            <div class="mb-8 w-full px-0 md:w-6/12 md:mb-0 md:px-8">
+          <div class="-mx-0 flex flex-wrap md:-mx-4">
+            <div class="mb-8 w-full px-0 md:w-6/12 md:mb-0 md:px-4">
               <div>
+                <p class="mb-4 max-w-md text-base font-medium text-white md:text-base">Hi, {{ auth()->user() ->role === 'guru' ? auth()->user()->guru->nama : auth()->user()->karyawan->nama }}</p>
                 <h2 class="mb-2 text-3xl font-bold text-white lg:text-5xl">Layanan</h2>
                 <h2 class="mb-4 text-3xl font-bold text-white lg:text-5xl">Simaku Jurnal</h2>
                 <p class="max-w-md text-sm font-normal text-white md:text-base">Sivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Nulla quis lorem ut libero malesuada feugiat. Vestibulum ac</p>
               </div>
             </div>
-            <div class="mb-8 w-full px-0 md:w-6/12 md:mb-0 md:px-8">
+            <div class="mb-8 w-full px-0 md:w-6/12 md:mb-0 md:px-4">
+              @if(auth()->user() ->role === 'guru')
               <div class="flex flex-wrap -mx-2">
                 <div class="w-6/12 px-2 mb-4">
                   <a href="{{ route('jurnal') }}" class="w-full">
                     <div class="p-4 bg-white rounded-lg w-full flex flex-col justify-center items-center shadow-lg">
-                      <div class="mb-2 p-2 h-12 w-12 bg-gradient-to-br from-blue-500 to-blue-700 flex justify-center items-center rounded-full">
+                      <div class="mb-2 p-2 h-12 w-12 bg-gradient-to-br from-emerald-500 to-emerald-700 flex justify-center items-center rounded-full">
                         <div class="h-6 w-6">
                           <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 448 512" class="text-white"><path fill="currentColor" d="M448 360V24c0-13.3-10.7-24-24-24H96C43 0 0 43 0 96v320c0 53 43 96 96 96h328c13.3 0 24-10.7 24-24v-16c0-7.5-3.5-14.3-8.9-18.7c-4.2-15.4-4.2-59.3 0-74.7c5.4-4.3 8.9-11.1 8.9-18.6zM128 134c0-3.3 2.7-6 6-6h212c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3 0-6-2.7-6-6v-20zm0 64c0-3.3 2.7-6 6-6h212c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3 0-6-2.7-6-6v-20zm253.4 250H96c-17.7 0-32-14.3-32-32c0-17.6 14.4-32 32-32h285.4c-1.9 17.1-1.9 46.9 0 64z"/></svg>
                         </div>
@@ -68,6 +73,21 @@
                   </a>
                 </div>
               <div>
+              @else
+              <div class="flex flex-wrap -mx-2">
+                <div class="w-6/12 px-2 mb-4">
+                  <a href="{{ route('jurnal') }}" class="w-full">
+                    <div class="p-4 bg-white rounded-lg w-full flex flex-col justify-center items-center shadow-lg">
+                      <div class="mb-2 p-2 h-12 w-12 bg-gradient-to-br from-emerald-500 to-emerald-700 flex justify-center items-center rounded-full">
+                        <div class="h-6 w-6">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 448 512" class="text-white"><path fill="currentColor" d="M448 360V24c0-13.3-10.7-24-24-24H96C43 0 0 43 0 96v320c0 53 43 96 96 96h328c13.3 0 24-10.7 24-24v-16c0-7.5-3.5-14.3-8.9-18.7c-4.2-15.4-4.2-59.3 0-74.7c5.4-4.3 8.9-11.1 8.9-18.6zM128 134c0-3.3 2.7-6 6-6h212c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3 0-6-2.7-6-6v-20zm0 64c0-3.3 2.7-6 6-6h212c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3 0-6-2.7-6-6v-20zm253.4 250H96c-17.7 0-32-14.3-32-32c0-17.6 14.4-32 32-32h285.4c-1.9 17.1-1.9 46.9 0 64z"/></svg>
+                        </div>
+                      </div>
+                        <p class="text-base font-bold text-gray-600 lg:text-xl">Jurnal</p>
+                    </div>
+                  </a>
+                </div>
+              @endif
             <div>
           </div>
       </div>
