@@ -32,8 +32,51 @@
                                 intval(date('Y')) ) }} @elseif(date('n')>= 6 &&
                                 date('n') <= 12) {{intval(date('Y')) . ' / ' . ( intval(date('Y')) + 1)}} @endif</p>
                         <div class="mb-8">
-                            <div class="flex flex-col items-center sm:flex-row">
-                                <div class="w-full mb-4">
+                            <div class="flex flex-wrap items-center -mx-2">
+                                <div class="w-full mb-4 w-full md:w-6/12 px-2">
+                                    <div class="flex flex-col">
+                                        <label class="mb-2 text-sm font-light text-gray-600" for="deskripsi">
+                                            Angkatan
+                                        </label>
+                                        <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="angkatan"
+                                    name="angkatan">
+                                            @if($request->angkatan === 'X')
+                                            <option selected>X</option>
+                                            <option value="">Semua</option>
+                                            <option>XI</option>
+                                            <option>XII</option>
+                                            @elseif($request->angkatan === 'XI')
+                                            <option selected>XI</option>
+                                            <option value="">Semua</option>
+                                            <option>X</option>
+                                            <option>XII</option>
+                                            @elseif($request->angkatan === 'XII')
+                                            <option selected>XII</option>
+                                            <option value="">Semua</option>
+                                            <option>X</option>
+                                            <option>XI</option>
+                                            @else
+                                            <option value="">Semua</option>
+                                            <option>X</option>
+                                            <option>XI</option>
+                                            <option>XII</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="w-full mb-4 w-full md:w-6/12 px-2">
+                                    <div class="flex flex-col">
+                                        <label class="mb-2 text-sm font-light text-gray-600" for="deskripsi">
+                                           Kelas
+                                        </label>
+                                        <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="kelas" name="kelas" >
+                                            <option value="">Semua</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-center -mx-2">
+                                <div class="w-full mb-4 w-full md:w-6/12 px-2">
                                     <div class="flex flex-col">
                                         <label class="mb-2 text-sm font-light text-gray-600" for="deskripsi">
                                             Tanggal Awal
@@ -42,14 +85,11 @@
                                         type="date"
                                         class="w-full border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md"
                                         name="search1" autocomplete="off"
-                                        value="{{ $input1}}"
+                                        value="{{ $request->search1}}"
                                         />
                                     </div>
                                 </div>
-                                <div class="mx-2 mt-4 hidden sm:block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path fill="currentColor" d="M19 12.998H5v-2h14z"/></svg>
-                                </div>
-                                <div class="w-full mb-4">
+                                <div class="w-full mb-4 w-full md:w-6/12 px-2">
                                     <div class="flex flex-col">
                                         <label class="mb-2 text-sm font-light text-gray-600" for="deskripsi">
                                             Tanggal Akhir
@@ -58,7 +98,7 @@
                                         type="date"
                                         class="w-full border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md"
                                         name="search2" autocomplete="off"
-                                        value="{{ $input2}}"
+                                        value="{{ $request->search2}}"
                                         />
                                     </div>
                                 </div>
@@ -67,7 +107,7 @@
                                 <button type="submit" class="mr-2 max-w-[140px] w-full bg-indigo-600 px-2 py-2 text-base font-bold text-white rounded" >
                                     CARI
                                 </button>
-                                @if($input1 !== null || $input2 !== null)
+                                @if($request->search1 !== null || $request->search2 !== null)
                                 <a href="{{ route('rekap.export') }}" class="ml-2 flex justify-center max-w-[140px] w-full bg-indigo-600 px-2 py-2 text-base font-bold text-white rounded" >
                                     UNDUH
                                 </a>
@@ -75,7 +115,7 @@
                             </div>
                         </div>
                         <div class="overvlow-y-auto">
-                            @if($input1 !== null || $input2 !== null)
+                            @if($request->search1 !== null || $request->search2 !== null)
                             <table class="w-full border-collapse border border-white">
                                 <thead class="bg-gray-100">
                                     <tr>
@@ -107,4 +147,92 @@
             </div>
         </div>
     </main>
+@endsection
+
+@section('script')
+    <script>
+        // data from laravel
+    const data = @json($siswa);
+    
+    // declare element variable
+    let elKelasContainer = document.getElementById('angkatan');
+    let elKelas = document.getElementById('kelas');
+    let elSiswa = document.getElementById('siswa');
+    
+    // data array
+    let classX = [];
+    let classXI = [];
+    let classXII = [];
+
+    // init kelas to array 
+    const setKelas = () => {
+        data.map((x, i) => {
+            const kelas = x.kelas.split(' / ');
+
+            if(kelas[0] == 'X') {
+                classX.push(x.kelas);
+            } else if(kelas[0] == 'XI') {
+                classXI.push(x.kelas);
+            } else if(kelas[0] == 'XII') {
+                classXII.push(x.kelas);
+            }
+        })
+        
+        const array_unnique = (value, index, self) => {
+            return self.indexOf(value) === index;
+        }
+
+        classX = classX.filter(array_unnique);
+        classXI = classXI.filter(array_unnique);
+        classXII = classXII.filter(array_unnique);
+    }
+
+    // if kelas on change
+    const changeKelas = (value) => {
+        const kelasValue = elKelasContainer.value;
+
+        elKelas.innerHTML = '';
+
+        if(kelasValue == 'X') {
+            @if($request->kelas !== null)
+            elKelas.innerHTML += `<option>{{ $request->kelas }}</option>`
+            @endif
+
+            classX.map((x) => {
+                elKelas.innerHTML += `<option>${x}</option>`
+            })
+        } else if(kelasValue == 'XI') {
+            @if($request->kelas !== null)
+            elKelas.innerHTML += `<option>{{ $request->kelas }}</option>`
+            @endif
+
+            classXI.map((x) => {
+                elKelas.innerHTML += `<option>${x}</option>`
+            })
+        } else if(kelasValue == 'XII') {
+            @if($request->kelas !== null)
+            elKelas.innerHTML += `<option>{{ $request->kelas }}</option>`
+            @endif
+
+            classXII.map((x) => {
+                elKelas.innerHTML += `<option>${x}</option>`
+            })
+        } else {
+            elKelas.innerHTML += `<option value="">Semua</option>`
+        }
+    }
+    
+
+    elKelasContainer.addEventListener('change', () => {
+        changeKelas();
+    })
+
+    window.onload = () => {
+        setKelas();
+
+        @if($request->kelas)
+        changeKelas();
+        @endif
+    }
+    </script>
 @endsection

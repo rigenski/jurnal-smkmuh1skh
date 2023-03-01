@@ -34,8 +34,12 @@
                 <td>{{ $data->siswa_hadir }}</td>
                 <td>{{ $data->siswa_tidak_hadir }}</td>
                 <td>
+                    @if($siswa->where('kelas', $data->kelas)->count() > 0)
                     {{ number_format( ( $siswa->where('kelas', $data->kelas)->count() - $data->siswa_pilihan->count() )
                     / $siswa->where('kelas', $data->kelas)->count() * 100 )}}
+                    @else
+                    100
+                    @endif
                     %
                 </td>
                 <td>{{ $siswa_pilihan->nama_siswa }} ({{ $siswa_pilihan->status }})</td>
@@ -73,8 +77,12 @@
             <td>{{ $data->siswa_hadir }}</td>
             <td>{{ $data->siswa_tidak_hadir }}</td>
             <td>
+                @if($siswa->where('kelas', $data->kelas)->count() > 0)
                 {{ number_format( ( $siswa->where('kelas', $data->kelas)->count() - $data->siswa_pilihan->count() )
                 / $siswa->where('kelas', $data->kelas)->count() * 100 )}}
+                @else
+                100
+                @endif
                 %
             </td>
             <td></td>

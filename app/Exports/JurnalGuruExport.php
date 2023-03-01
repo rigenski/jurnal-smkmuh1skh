@@ -20,19 +20,41 @@ class JurnalGuruExport implements FromView, ShouldAutoSize, WithTitle
     {
         $search1 = session()->get('search1');
         $search2 = session()->get('search2');
+        $kelas = session()->get('kelas');
 
         if ($search1 !== null && $search2 == null) {
-            $jurnal_guru = JurnalGuru::where('tanggal', 'LIKE', '%' . $search1 . '%')
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $jurnal_guru = JurnalGuru::where('tanggal', 'LIKE', '%' . $search1 . '%');
+                  if($kelas !== null) {
+                        $jurnal_guru = $jurnal_guru->where('kelas', $kelas)
+                        ->orderBy('created_at', 'desc')
+                        ->get();           
+                    } else {
+                        $jurnal_guru = $jurnal_guru
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+                    }
         } else if ($search1 == null && $search2 !== null) {
-            $jurnal_guru = JurnalGuru::where('tanggal', 'LIKE', '%' . $search2 . '%')
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $jurnal_guru = JurnalGuru::where('tanggal', 'LIKE', '%' . $search2 . '%');
+                  if($kelas !== null) {
+                        $jurnal_guru = $jurnal_guru->where('kelas', $kelas)
+                        ->orderBy('created_at', 'desc')
+                        ->get();           
+                    } else {
+                        $jurnal_guru = $jurnal_guru
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+                    }
         } else if ($search1 !== null && $search2 !== null) {
-            $jurnal_guru = JurnalGuru::whereBetween('tanggal', [DATE($search1), DATE($search2)])
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $jurnal_guru = JurnalGuru::whereBetween('tanggal', [DATE($search1), DATE($search2)]);
+                  if($kelas !== null) {
+                        $jurnal_guru = $jurnal_guru->where('kelas', $kelas)
+                        ->orderBy('created_at', 'desc')
+                        ->get();           
+                    } else {
+                        $jurnal_guru = $jurnal_guru
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+                    }
         } else {
             $jurnal_guru = [];
         }

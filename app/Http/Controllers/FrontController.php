@@ -273,10 +273,19 @@ class FrontController extends Controller
                         DB::raw('DATE(tanggal) as tanggal')
                     ])
                     ->groupBy('tanggal')
-                    ->where('tanggal', 'LIKE', '%' . $request->search1 . '%')
-                    ->orderBy('created_at', 'desc')
-                    ->get()
-                    ->toArray();
+                    ->where('tanggal', 'LIKE', '%' . $request->search1 . '%');
+
+                    if($request->kelas !== null) {
+                        $jurnal_guru = $jurnal_guru->where('kelas', $request->kelas)
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                    } else {
+                        $jurnal_guru = $jurnal_guru
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                    }
             } else if ($request->has('search2') && $request->search1 == null) {
                 $jurnal_guru = DB::table('jurnal_guru')
                     ->select([
@@ -284,10 +293,19 @@ class FrontController extends Controller
                         DB::raw('DATE(tanggal) as tanggal')
                     ])
                     ->groupBy('tanggal')
-                    ->where('tanggal', 'LIKE', '%' . $request->search2 . '%')
-                    ->orderBy('created_at', 'desc')
-                    ->get()
-                    ->toArray();
+                    ->where('tanggal', 'LIKE', '%' . $request->search2 . '%');
+                    
+                    if($request->kelas !== null) {
+                        $jurnal_guru = $jurnal_guru->where('kelas', $request->kelas)
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                    } else {
+                        $jurnal_guru = $jurnal_guru
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                    }
             } else if ($request->has('search1') && $request->has('search2')) {
                 $jurnal_guru = DB::table('jurnal_guru')
                     ->select([
@@ -295,17 +313,28 @@ class FrontController extends Controller
                         DB::raw('DATE(tanggal) as tanggal')
                     ])
                     ->groupBy('tanggal')
-                    ->whereBetween('tanggal', [DATE($request->search1), DATE($request->search2)])
-                    ->orderBy('created_at', 'desc')
-                    ->get()
-                    ->toArray();
+                    ->whereBetween('tanggal', [DATE($request->search1), DATE($request->search2)]);
+                    
+                    if($request->kelas !== null) {
+                        $jurnal_guru = $jurnal_guru->where('kelas', $request->kelas)
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                    } else {
+                        $jurnal_guru = $jurnal_guru
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                    }
             } else {
                 $jurnal_guru = [];
             }
 
-            session(['search1' => $request->search1, 'search2' => $request->search2]);
+            $siswa = Siswa::all();
 
-            return view('rekap', ['jurnal_guru' => $jurnal_guru, 'input1' => $request->search1, 'input2' => $request->search2]);
+            session(['search1' => $request->search1, 'search2' => $request->search2, 'kelas' => $request->kelas]);
+
+            return view('rekap', ['jurnal_guru' => $jurnal_guru, 'siswa' => $siswa, 'request' => $request]);
         }
     }
 
