@@ -19,6 +19,9 @@ use App\UnitKerja;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use App\Exports\JurnalGuruExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FrontController extends Controller
 {
@@ -53,41 +56,6 @@ class FrontController extends Controller
         }
     }
 
-    public function izinIndex()
-    {
-        date_default_timezone_set("Asia/Jakarta");
-
-        if (auth()->user()->role == 'guru') {
-            $time = Carbon::now();
-            $aktivitas_izin_guru = AktivitasGuruIzin::where("user_id", auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
-            $user = Guru::where('user_id', auth()->user()->id)->get();
-            $siswa = Siswa::all();
-            $user = $user[0];
-
-            $mata_pelajaran = MataPelajaran::all();
-
-            return view('izin', compact('time', 'aktivitas_izin_guru',  'siswa', 'user', 'mata_pelajaran'));
-        }
-    }
-
-    public function refleksiIndex()
-    {
-        date_default_timezone_set("Asia/Jakarta");
-
-        if (auth()->user()->role == 'guru') {
-            $time = Carbon::now();
-            $aktivitas_refleksi_guru = AktivitasGuruRefleksi::where("user_id", auth()->user()->id)->whereMonth('created_at', explode('-', date('Y-m'))[1])->whereYear('created_at', explode('-', date('Y-m'))[0])->get();
-            $siswa = Siswa::all();
-            $user = Guru::where('user_id', auth()->user()->id)->get();
-            $user = $user[0];
-            $is_last_week = '';
-
-            $mata_pelajaran = MataPelajaran::all();
-
-            return view('refleksi', compact('time', 'aktivitas_refleksi_guru', 'is_last_week', 'siswa', 'user', 'mata_pelajaran'));
-        }
-    }
-
     public function jurnalStore(Request $request)
     {
         date_default_timezone_set("Asia/Jakarta");
@@ -112,6 +80,8 @@ class FrontController extends Controller
                     "siswa_hadir" => $request->siswa ? $class->count() - count($request->siswa) : $class->count(),
                     "siswa_tidak_hadir" =>  $request->siswa ? count($request->siswa) : 0,
                     "deskripsi" => $request->deskripsi,
+                    "mengajar_jam_terakhir" => $request->mengajar ?? null,
+                    "mendampingi_kelas" => $request->mendampingi ?? null,
                     "catatan_siswa" => $request->catatan_siswa,
                 ]);
 
@@ -137,7 +107,7 @@ class FrontController extends Controller
                     'user_id' => auth()->user()->id
                 ]);
 
-                return redirect('/congrats')->with('success', 'jurnal');
+                return redirect('/result')->with('success', 'jurnal');
         }
 
         if (auth()->user()->role == 'karyawan') {
@@ -158,7 +128,24 @@ class FrontController extends Controller
                 'user_id' => auth()->user()->id
             ]);
 
-            return redirect('/congrats')->with('success', 'success');
+            return redirect('/result')->with('success', 'success');
+        }
+    }
+
+    public function izinIndex()
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'guru') {
+            $time = Carbon::now();
+            $aktivitas_izin_guru = AktivitasGuruIzin::where("user_id", auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
+            $user = Guru::where('user_id', auth()->user()->id)->get();
+            $siswa = Siswa::all();
+            $user = $user[0];
+
+            $mata_pelajaran = MataPelajaran::all();
+
+            return view('izin', compact('time', 'aktivitas_izin_guru',  'siswa', 'user', 'mata_pelajaran'));
         }
     }
 
@@ -171,7 +158,6 @@ class FrontController extends Controller
             'jam_ke' => 'required',
             'sampai_jam_ke' => 'required',
             'ruang' => 'required',
-            'surat_izin' => 'required',
         ]);
 
         $izin_guru = IzinGuru::create([
@@ -205,8 +191,30 @@ class FrontController extends Controller
             'user_id' => auth()->user()->id
         ]);
 
-        return redirect('/congrats')->with('success', 'izin');
+        return redirect('/result')->with('success', 'izin');
     }
+
+
+    public function refleksiIndex()
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'guru') {
+            $month = date('m') != date('m', strtotime('+1 week')) ? date('Y-m') : date('Y-m', strtotime('-1 month', strtotime(date('Y-m-d'))));
+
+            $time = Carbon::now();
+            $aktivitas_refleksi_guru = AktivitasGuruRefleksi::where("user_id", auth()->user()->id)->whereMonth('created_at', explode('-', $month)[1])->whereYear('created_at', explode('-', $month)[0])->get();
+            $siswa = Siswa::all();
+            $user = Guru::where('user_id', auth()->user()->id)->get();
+            $user = $user[0];
+            $is_last_week = '';
+
+            $mata_pelajaran = MataPelajaran::all();
+
+            return view('refleksi', compact('time', 'aktivitas_refleksi_guru', 'is_last_week', 'siswa', 'user', 'mata_pelajaran'));
+        }
+    }
+
 
     public function refleksiStore(Request $request) {
         $request->validate([
@@ -224,7 +232,7 @@ class FrontController extends Controller
 
         $refleksi_guru = RefleksiGuru::create([
             "nama" => auth()->user()->guru->nama,
-            "bulan" => date('Y-m'),
+            "bulan" => date('m') != date('m', strtotime('+1 week')) ? date('Y-m') : date('Y-m', strtotime('-1 month', strtotime(date('Y-m-d')))),
             "kelas" => $request->kelas,
             "mata_pelajaran" => $request->mata_pelajaran,
             "pertanyaan1" => $request->pertanyaan1,
@@ -242,12 +250,70 @@ class FrontController extends Controller
             'user_id' => auth()->user()->id
         ]);
 
-        return redirect('/congrats')->with('success', 'refleksi');
+        return redirect('/result')->with('success', 'refleksi');
     }
 
 
-    public function congrats()
+    public function result()
     {
-        return view('congrats');
+        return view('result');
+    }
+
+    public function rekapIndex(Request $request)
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'guru') {
+            date_default_timezone_set("Asia/Jakarta");
+
+            if ($request->has('search1') && $request->search2 == null) {
+                $jurnal_guru = DB::table('jurnal_guru')
+                    ->select([
+                        DB::raw('count(*) as jumlah'),
+                        DB::raw('DATE(tanggal) as tanggal')
+                    ])
+                    ->groupBy('tanggal')
+                    ->where('tanggal', 'LIKE', '%' . $request->search1 . '%')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            } else if ($request->has('search2') && $request->search1 == null) {
+                $jurnal_guru = DB::table('jurnal_guru')
+                    ->select([
+                        DB::raw('count(*) as jumlah'),
+                        DB::raw('DATE(tanggal) as tanggal')
+                    ])
+                    ->groupBy('tanggal')
+                    ->where('tanggal', 'LIKE', '%' . $request->search2 . '%')
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            } else if ($request->has('search1') && $request->has('search2')) {
+                $jurnal_guru = DB::table('jurnal_guru')
+                    ->select([
+                        DB::raw('count(*) as jumlah'),
+                        DB::raw('DATE(tanggal) as tanggal')
+                    ])
+                    ->groupBy('tanggal')
+                    ->whereBetween('tanggal', [DATE($request->search1), DATE($request->search2)])
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+                    ->toArray();
+            } else {
+                $jurnal_guru = [];
+            }
+
+            session(['search1' => $request->search1, 'search2' => $request->search2]);
+
+            return view('rekap', ['jurnal_guru' => $jurnal_guru, 'input1' => $request->search1, 'input2' => $request->search2]);
+        }
+    }
+
+    public function rekapExport()
+    {
+        $search1 = session()->get('search1');
+        $search2 = session()->get('search2');
+
+        return Excel::download(new JurnalGuruExport(), 'Jurnal Guru SMK Muhammadiyah 1 Sukoharjo - ' . '.xlsx');
     }
 }

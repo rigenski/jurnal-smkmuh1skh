@@ -169,14 +169,13 @@
                             <div class="w-full">
                                 <div class="mb-2 flex flex-col md:mb-4">
                                     <label class="mb-2 text-sm font-light text-gray-600" for="surat_izin">
-                                        7. Surat Izin <span class="text-red-600">*</span>
+                                        7. Surat Izin
                                     </label>
                                     <input
                                     type="file"
                                     class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md"
                                     id="surat_izin"
                                     name="surat_izin"
-                                    required
                                     />
                                     <small class="mt-2 text-xs font-normal text-gray-400">Ukuran maksimal 5Mb</small>
                                 </div>
@@ -195,7 +194,7 @@
 
 @section('modal')
         <div id="modal" class="min-h-screen w-full hidden fixed top-0 left-0 overflow-scroll bg-gray-800 bg-opacity-50">
-            <div class="min-h-screen w-full absolute left-0 top-0 flex justify-center overflow-scroll">
+            <div class="min-h-screen w-full absolute left-0 top-0 flex justify-center">
                 <div class="container px-4 py-16 max-w-md">
                     <div class="p-4 w-full bg-white rounded-lg">
                         <div class="mb-4 flex justify-between">
@@ -306,22 +305,22 @@
         setKelas();
     }
     
-    var petunjukTugasFile = document.getElementById("petunjuk_tugas_file");
-    var suratIzin = document.getElementById("surat_izin");
+    // var petunjukTugasFile = document.getElementById("petunjuk_tugas_file");
+    // var suratIzin = document.getElementById("surat_izin");
 
-    petunjukTugasFile.onchange = function() {
-        if(this.files[0].size > 500000){
-           alert("Dokumen / Foto terlalu besar!");
-           this.value = "";
-        };
-    };
+    // petunjukTugasFile.onchange = function() {
+    //     if(this.files[0].size > 500000){
+    //        alert("Dokumen / Foto terlalu besar!");
+    //        this.value = "";
+    //     };
+    // };
     
-    suratIzin.onchange = function() {
-        if(this.files[0].size > 500000){
-           alert("Dokumen / Foto terlalu besar!");
-           this.value = "";
-        };
-    };
+    // suratIzin.onchange = function() {
+    //     if(this.files[0].size > 500000){
+    //        alert("Dokumen / Foto terlalu besar!");
+    //        this.value = "";
+    //     };
+    // };
 
 
     // modal 

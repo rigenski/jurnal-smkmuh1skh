@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSiswaPilihanTable extends Migration
+class CreatePengaturanIzinGuruTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateSiswaPilihanTable extends Migration
      */
     public function up()
     {
-        Schema::create('siswa_pilihan', function (Blueprint $table) {
+        Schema::create('pengaturan_izin_guru', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_siswa');
-            $table->foreignId('jurnal_guru_id')->constrained('jurnal_guru');
+            $table->string('hari');
+            $table->string('kelas');
+            $table->string('jam_ke');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateSiswaPilihanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('siswa_pilihan');
+        Schema::dropIfExists('pengaturan_izin_guru');
     }
 }

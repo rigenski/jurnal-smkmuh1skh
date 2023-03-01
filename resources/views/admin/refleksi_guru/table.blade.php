@@ -64,7 +64,7 @@
             <td colspan="16">P5: Jika memiliki kesempatan mengajar materi pelajaran yang sama pada kelompok siswa yang sama, hal apa yang akan dilakukan secara berbeda</td>
         </tr>
         <tr>
-            <td colspan="16">P6: Sebutkan nama siswa yang terlibat aktif dalam pembelajaran bulan inii</td>
+            <td colspan="16">P6: Sebutkan nama siswa yang terlibat aktif dalam pembelajaran bulan ini</td>
         </tr>
         <tr>
             <td colspan="16">P7: Sebutkan nama siswa yang tampak membutuhkan lebih banyak dukungan dan perhatian dibulan berikutnya</td>

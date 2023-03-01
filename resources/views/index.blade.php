@@ -70,6 +70,18 @@
                     </div>
                   </a>
                 </div>
+                <div class="w-6/12 p-2">
+                  <a href="{{ route('rekap') }}" class="w-full">
+                    <div class="p-4 bg-white rounded-lg w-full flex flex-col justify-center items-center shadow-lg">
+                      <div class="mb-2 p-2 h-12 w-12 bg-gradient-to-br from-cyan-500 to-cyan-700 flex justify-center items-center rounded-full">
+                        <div class="h-6 w-6">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" class="text-white"><g fill="none"><path fill="currentColor" d="M21 7c0 2.21-4.03 4-9 4S3 9.21 3 7s4.03-4 9-4s9 1.79 9 4z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 7c0 2.21-4.03 4-9 4S3 9.21 3 7m18 0c0-2.21-4.03-4-9-4S3 4.79 3 7m18 0v5M3 7v5m18 0c0 2.21-4.03 4-9 4s-9-1.79-9-4m18 0v5c0 2.21-4.03 4-9 4s-9-1.79-9-4v-5"/></g></svg>
+                        </div>
+                      </div>
+                      <p class="text-base font-bold text-gray-600 lg:text-xl">Rekap</p>
+                    </div>
+                  </a>
+                </div>
               <div>
               @else
               <div class="flex flex-wrap -mx-2">

@@ -173,6 +173,21 @@
                                     <small class="mt-2 text-xs font-normal text-gray-400">Contoh Penulisan : Siswa yang bernama Ahmad tidak masuk 3 kali berturut turut</small>
                                 </div>
                             </div>
+                            <div class="w-full">
+                                <div class="mb-2 flex flex-col md:mb-4">
+                                    <label class="mb-2 text-sm font-light text-gray-600" for="mengajar">
+                                        8. Apakah Bapak dan Ibu mengajar di jam terakhir ?  <span class="text-red-600">*</span>
+                                    </label>
+                                    <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="mengajar" name="mengajar" required>
+                                        <option value="">-- Pilih --</option>
+                                       <option>Ya</option>
+                                       <option>Tidak</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="w-full" id="mendampingi-container">
+                               
+                            </div>
                             <div class="flex justify-end mt-8">
                                 <button type="submit" class="min-w-[140px] bg-indigo-600 px-2 py-2 text-base font-bold text-white rounded" >
                                     KIRIM
@@ -187,7 +202,7 @@
 
 @section('modal')
         <div id="modal" class="min-h-screen w-full hidden fixed top-0 left-0 overflow-scroll bg-gray-800 bg-opacity-50">
-            <div class="min-h-screen w-full absolute left-0 top-0 flex justify-center overflow-scroll">
+            <div class="min-h-screen w-full absolute left-0 top-0 flex justify-center">
                 <div class="container px-4 py-16 max-w-md">
                     <div class="p-4 w-full bg-white rounded-lg">
                         <div class="mb-4 flex justify-between">
@@ -331,6 +346,27 @@
             setKelas();
         }
 
+        const terakhirEl = document.getElementById('mengajar');
+        const mendampingiContainer = document.getElementById('mendampingi-container');
+
+        terakhirEl.addEventListener('change', (e) => {
+            if(e.target.value === 'Ya') {
+              mendampingiContainer.innerHTML =  `<div class="mb-2 flex flex-col md:mb-4">
+                                    <label class="mb-2 text-sm font-light text-gray-600" for="mendampingi">
+                                        9. Apabila Bapak dan Ibu mengajar di jam terakhir. Apakah sudah mengarahkan dan mendampingi kebersihan kelas ?  <span class="text-red-600">*</span>
+                                    </label>
+                                    <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="mendampingi" name="mendampingi" required>
+                                        <option value="">-- Pilih --</option>
+                                       <option>Ya</option>
+                                       <option>Tidak</option>
+                                    </select>
+                                </div>`;
+            } else {
+                mendampingiContainer.innerHTML = '';
+            }
+
+        })
+
         // modal 
 
         const modalContainer = document.getElementById('modal');
@@ -430,7 +466,7 @@
 
 @section('modal')
         <div id="modal" class="min-h-screen w-full hidden fixed top-0 left-0 overflow-scroll bg-gray-800 bg-opacity-50">
-            <div class="min-h-screen w-full absolute left-0 top-0 flex justify-center overflow-scroll">
+            <div class="min-h-screen w-full absolute left-0 top-0 flex justify-center">
                 <div class="container px-4 py-16 max-w-md">
                     <div class="p-4 w-full bg-white rounded-lg">
                         <div class="mb-4 flex justify-between">

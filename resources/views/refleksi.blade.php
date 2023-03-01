@@ -35,7 +35,7 @@
                     <form class="p-4 w-full max-w-2xl bg-white rounded-lg shadow-lg md:p-8" action="{{ route('refleksi.store')}}" method="post" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <h4 class="mb-2 text-2xl font-semibold text-gray-800 lg:text-3xl">Refleksi Guru</h4>
-                        <p class="mb-8 text-sm font-normal text-gray-600 lg:text-base">Bulan {{ date('F') }} <br /> Tahun
+                        <p class="mb-8 text-sm font-normal text-gray-600 lg:text-base">Bulan {{ date('m') != date('m', strtotime('+1 week')) ? date('F') : date('F', strtotime('-1 month', strtotime(date('Y-m-d')))) }} <br /> Tahun
                             Pelajaran @if(date('n')>= 1 && date('n') <= 6 ) {{ ( intval(date('Y')) - 1 ) . ' / ' . (
                                 intval(date('Y')) ) }} @elseif(date('n')>= 6 &&
                                 date('n') <= 12) {{intval(date('Y')) . ' / ' . ( intval(date('Y')) + 1)}} @endif</p>
@@ -46,7 +46,7 @@
                                 <h4 class="mb-0.5 text-lg font-semibold text-gray-800 text-center lg:text-2xl">Terimakasih !!!</h4>
                                 <p class="text-sm font-normal text-gray-600 text-center lg:text-base">Kamu sudah mengisi Refleksi pada bulan ini</p>
                             </div>
-                            @elseif(date('m') != date('m', strtotime('+1 week')))
+                            @elseif(date('m') != date('m', strtotime('+1 week')) || (date('j') <= 7 && date('N') <= 7))
                             <div class="w-full">
                                 <div class="mb-2 flex flex-col md:mb-4">
                                     <label class="mb-2 text-sm font-light text-gray-600" to="kelas_container">
@@ -153,7 +153,7 @@
                             <div class="w-full">
                                 <div class="mb-2 flex flex-col md:mb-4">
                                     <label class="mb-2 text-sm font-light text-gray-600" for="pertanyaan6">
-                                        8. Sebutkan nama siswa yang terlibat aktif dalam pembelajaran bulan inii ? <span class="text-red-600">*</span>
+                                        8. Sebutkan nama siswa yang terlibat aktif dalam pembelajaran bulan ini ? <span class="text-red-600">*</span>
                                     </label>
                                     <input
                                     type="text"
@@ -214,7 +214,7 @@
 
 @section('modal')
         <div id="modal" class="min-h-screen w-full hidden fixed top-0 left-0 overflow-scroll bg-gray-800 bg-opacity-50">
-            <div class="min-h-screen w-full absolute left-0 top-0 flex justify-center overflow-scroll">
+            <div class="min-h-screen w-full absolute left-0 top-0 flex justify-center">
                 <div class="container px-4 py-16 max-w-md">
                     <div class="p-4 w-full bg-white rounded-lg">
                         <div class="mb-4 flex justify-between">
@@ -277,7 +277,7 @@
         modalContainer.classList.add('hidden');
     })        
 </script>
-@elseif(date('m') != date('m', strtotime('+1 week')))
+@elseif(date('m') != date('m', strtotime('+1 week')) || (date('j') <= 7 && date('N') <= 7))
 <script>
     // data from laravel
     const data = @json($siswa);

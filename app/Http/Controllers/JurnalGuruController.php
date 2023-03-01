@@ -69,7 +69,8 @@ class JurnalGuruController extends Controller
     public function export()
     {
         $search1 = session()->get('search1');
+        $search2 = session()->get('search2');
 
-        return Excel::download(new JurnalGuruExport(), 'Jurnal Guru SMK Muhammadiyah 1 Sukoharjo - ' . $search1 . '.xlsx');
+        return Excel::download(new JurnalGuruExport(), 'Jurnal Guru SMK Muhammadiyah 1 Sukoharjo - ' . $search1 . ($search2 ? '-' . $search2 : '') . '.xlsx');
     }
 }

@@ -34,7 +34,7 @@ class JurnalGuruExport implements FromView, ShouldAutoSize, WithTitle
                 ->orderBy('created_at', 'desc')
                 ->get();
         } else {
-            $jurnal_guru = JurnalGuru::all();
+            $jurnal_guru = [];
         }
 
         $siswa = Siswa::all();
