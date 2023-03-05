@@ -36,7 +36,7 @@
                                 <div class="w-full mb-4 w-full md:w-6/12 px-2">
                                     <div class="flex flex-col">
                                         <label class="mb-2 text-sm font-light text-gray-600" for="deskripsi">
-                                            Angkatan
+                                            Tingkat
                                         </label>
                                         <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="angkatan"
                                     name="angkatan">
@@ -67,7 +67,7 @@
                                 <div class="w-full mb-4 w-full md:w-6/12 px-2">
                                     <div class="flex flex-col">
                                         <label class="mb-2 text-sm font-light text-gray-600" for="deskripsi">
-                                           Kelas
+                                           Kelas/Jurusan
                                         </label>
                                         <select class="border px-4 py-1.5 text-base font-normal text-gray-800 rounded-md" id="kelas" name="kelas" >
                                             <option value="">Semua</option>

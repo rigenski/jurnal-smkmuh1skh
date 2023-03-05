@@ -30,7 +30,8 @@
                         </svg>
                     </a>
                     <div class="mx-2">
-                        <a href="{{ route('admin.refleksi_guru.export') }}" class="btn btn-success">Export</a>
+                        {{-- <a href="{{ route('admin.refleksi_guru.export') }}" class="btn btn-success">Export</a> --}}
+                        <button class="btn btn-success" data-toggle="modal" data-target="#modal-export">Export</button>
                     </div>
                 </div>
             </div>
@@ -63,4 +64,37 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('modal')
+    
+<!-- Modal Print -->
+<div class="modal fade" id="modal-export" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('admin.refleksi_guru.export') }}" method="get" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Export Data Refleksi Guru</h5>
+                </span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="tanggal_raport">Tipe <span class="text-danger">*</span></label>
+                    <select class="form-control" autocomplete="off" name="tipe" required>
+                        <option>Pendidik</option>
+                        <option>Wali Kelas</option>
+                        <option>Sekolah</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Tidak</button>
+                <button type="submit" class="btn btn-primary">Export</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection

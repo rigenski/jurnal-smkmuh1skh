@@ -11,6 +11,13 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class RefleksiGuruExport implements FromView, ShouldAutoSize, WithTitle
 {
+    protected $request;
+
+    function __construct($request)
+    {
+        $this->request = $request;
+    }
+
     public function title(): string
     {
         return 'List Refleksi Guru';
@@ -28,6 +35,6 @@ class RefleksiGuruExport implements FromView, ShouldAutoSize, WithTitle
             $data_refleksi = RefleksiGuru::where('bulan', date('Y-m'))->get();
         }
 
-        return view('admin/refleksi_guru/table', ['data_refleksi' => $data_refleksi]);
+        return view('admin/refleksi_guru/table', ['data_refleksi' => $data_refleksi, 'request' => $this->request]);
     }
 }

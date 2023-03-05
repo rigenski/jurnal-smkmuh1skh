@@ -26,10 +26,10 @@ class RefleksiGuruController extends Controller
         return view('admin/refleksi_guru/index', ['data_refleksi' => $data_refleksi, 'bulan' => $request->bulan]);
     }
 
-    public function export()
+    public function export(Request $request)
     {
         $bulan = session()->get('refleksi_guru-bulan');
 
-        return Excel::download(new RefleksiGuruExport(), 'Refleksi Guru SMK Muhammadiyah 1 Sukoharjo - ' . $bulan . '.xlsx');
+        return Excel::download(new RefleksiGuruExport($request), 'Refleksi Guru SMK Muhammadiyah 1 Sukoharjo - ' . $bulan . '.xlsx');
     }
 }
