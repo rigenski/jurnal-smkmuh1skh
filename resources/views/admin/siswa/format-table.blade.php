@@ -1,0 +1,11 @@
+<table>
+    <thead>
+        <tr>
+            <th><b>USERNAME</b></th>
+            <th><b>PASSWORD</b></th>
+            <th><b>NIS</b></th>
+            <th><b>NAMA</b></th>
+            <th><b>KELAS</b></th>
+        </tr>
+    </thead>
+</table>

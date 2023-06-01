@@ -1,0 +1,89 @@
+/* GLOBAL */
+
+@font-face {
+    font-family: "Rubik";
+    src: url("./../fonts/Rubik-Regular.ttf");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Rubik";
+    src: url("./../fonts/Rubik-Medium.ttf");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Rubik";
+    src: url("./../fonts/Rubik-Semibold.ttf");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "Rubik";
+    src: url("./../fonts/Rubik-Bold.ttf");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "Rubik";
+    src: url("./../fonts/Rubik-ExtraBold.ttf");
+    font-weight: 700;
+}
+
+* {
+    font-family: "Rubik";
+}
+
+/* UTITILIES */
+
+.font-weight-medium {
+    font-weight: 500;
+}
+
+.font-weight-semibold {
+    font-weight: 600;
+}
+
+.h-screen {
+    height: 100vh;
+}
+
+/* JURNAL  */
+
+#form__title {
+    font-size: 1.4rem;
+}
+
+#form__desc {
+    font-size: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+    #form__title {
+        font-size: 1.8rem;
+    }
+
+    #form__desc {
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    #form__title {
+        font-size: 2rem;
+    }
+
+    #form__desc {
+        font-size: 1.4rem;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    #form__title {
+        font-size: 2.6rem;
+    }
+
+    #form__desc {
+        font-size: 1.8rem;
+    }
+}

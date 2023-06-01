@@ -1,0 +1,634 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\AktivitasGuru;
+use App\AktivitasGuruIzin;
+use App\AktivitasGuruRefleksi;
+use App\AktivitasKaryawan;
+use App\AktivitasSiswaRefleksi;
+use App\AktivitasSiswaSertifikat;
+use App\SiswaPilihan;
+use App\JurnalGuru;
+use App\RefleksiGuru;
+use App\Siswa;
+use App\Guru;
+use App\IzinGuru;
+use App\JurnalKaryawan;
+use App\Karyawan;
+use App\MataPelajaran;
+use App\UnitKerja;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use App\Exports\JurnalGuruExport;
+use App\GuruMataPelajaran;
+use App\RefleksiSiswa;
+use App\SiswaSertifikat;
+use Illuminate\Support\Facades\App;
+use Maatwebsite\Excel\Facades\Excel;
+use Mpdf\Mpdf;
+
+class FrontController extends Controller
+{
+    public function index()
+    {
+        return view('index');
+    }
+
+    public function jurnalIndex()
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'guru') {
+            $time = Carbon::now();
+            $aktivitas_jurnal_guru = AktivitasGuru::where("user_id", auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
+            $siswa = Siswa::all();
+            $user = Guru::where('user_id', auth()->user()->id)->get();
+            $user = $user[0];
+
+            $mata_pelajaran = MataPelajaran::all();
+
+            return view('jurnal', compact('time', 'aktivitas_jurnal_guru', 'siswa', 'user', 'mata_pelajaran'));
+        }
+
+        if (auth()->user()->role == 'karyawan') {
+            $time = Carbon::now();
+            $aktivitas_jurnal_karyawan = Aktivitaskaryawan::where("user_id", auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
+            $unit_kerja = UnitKerja::all();
+            $user = Karyawan::where('user_id', auth()->user()->id)->get();
+            $user = $user[0];
+
+            return view('jurnal', compact('time', 'aktivitas_jurnal_karyawan', 'unit_kerja', 'user'));
+        }
+    }
+
+    public function jurnalStore(Request $request)
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'guru') {
+            $request->validate([
+                'kelas' => 'required',
+                'jam_ke' => 'required',
+                'sampai_jam_ke' => 'required',
+                'mata_pelajaran' => 'required',
+                'deskripsi' => 'required',
+            ]);
+
+            $class = Siswa::where('kelas', $request->kelas)->get();
+
+            $siswa_tidak_hadir = 0;
+
+            if ($request->siswa) {
+                foreach ($request->siswa as $index => $siswa) {
+                    $nis_siswa = explode("-", $siswa)[0];
+                    $status = explode("-", $siswa)[1];
+
+                    $siswa = Siswa::find($nis_siswa);
+
+                    if ($status !== 'Hadir') {
+                        $siswa_tidak_hadir += 1;
+                    }
+                }
+            }
+
+            $jurnal_guru = JurnalGuru::create([
+                "nama" => auth()->user()->guru->nama,
+                "tanggal" => date('Y-m-d'),
+                "kelas" => $request->kelas,
+                "jam_ke" => $request->jam_ke == $request->sampai_jam_ke ? $request->jam_ke : $request->jam_ke . '-' . $request->sampai_jam_ke,
+                "mata_pelajaran" => $request->mata_pelajaran,
+                "siswa_hadir" => $request->siswa ? $class->count() - $siswa_tidak_hadir : $class->count(),
+                "siswa_tidak_hadir" =>  $siswa_tidak_hadir,
+                "deskripsi" => $request->deskripsi,
+                "mengajar_jam_terakhir" => $request->mengajar ?? null,
+                "mendampingi_kelas" => $request->mendampingi ?? null,
+                "catatan_siswa" => $request->catatan_siswa,
+            ]);
+
+            if ($request->siswa) {
+                foreach ($request->siswa as $index => $siswa) {
+                    $nis_siswa = explode("-", $siswa)[0];
+                    $status = explode("-", $siswa)[1];
+
+                    $siswa = Siswa::find($nis_siswa);
+
+                    if ($status !== 'Hadir') {
+                        SiswaPilihan::create([
+                            "jurnal_guru_id" => $jurnal_guru->id,
+                            "nama_siswa" => $siswa->nama,
+                            "status" => $status,
+                        ]);
+                    }
+                }
+            }
+
+            AktivitasGuru::create([
+                'jurnal_guru_id' => $jurnal_guru->id,
+                'user_id' => auth()->user()->id
+            ]);
+
+            return redirect('/result')->with('success', 'jurnal');
+        }
+
+        if (auth()->user()->role == 'karyawan') {
+            $request->validate([
+                'unit_kerja' => 'required',
+                'deskripsi' => 'required',
+            ]);
+
+            $jurnal_karyawan = JurnalKaryawan::create([
+                "nama" => auth()->user()->karyawan->nama,
+                "tanggal" => date('Y-m-d'),
+                "unit_kerja" => $request->unit_kerja,
+                "deskripsi" => $request->deskripsi,
+            ]);
+
+            AktivitasKaryawan::create([
+                'jurnal_karyawan_id' => $jurnal_karyawan->id,
+                'user_id' => auth()->user()->id
+            ]);
+
+            return redirect('/result')->with('success', 'success');
+        }
+    }
+
+    public function izinIndex()
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'guru') {
+            $time = Carbon::now();
+            $aktivitas_izin_guru = AktivitasGuruIzin::where("user_id", auth()->user()->id)->whereDate('created_at', Carbon::today())->get();
+            $user = Guru::where('user_id', auth()->user()->id)->get();
+            $siswa = Siswa::all();
+            $user = $user[0];
+
+            $mata_pelajaran = MataPelajaran::all();
+
+            return view('izin', compact('time', 'aktivitas_izin_guru',  'siswa', 'user', 'mata_pelajaran'));
+        }
+    }
+
+    public function izinStore(Request $request)
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        $request->validate([
+            'jenis_izin' => 'required',
+            'kelas' => 'required',
+            'jam_ke' => 'required',
+            'sampai_jam_ke' => 'required',
+            'ruang' => 'required',
+        ]);
+
+        $izin_guru = IzinGuru::create([
+            "jenis_izin" => $request->jenis_izin,
+            "nama" => auth()->user()->guru->nama,
+            "tanggal" => date('Y-m-d'),
+            "kelas" => $request->kelas,
+            "jam_ke" => $request->jam_ke == $request->sampai_jam_ke ? $request->jam_ke : $request->jam_ke . '-' . $request->sampai_jam_ke,
+            "ruang" => $request->ruang,
+            "petunjuk_tugas" => $request->petunjuk_tugas,
+        ]);
+
+        if ($request->hasFile('petunjuk_tugas_file')) {
+            $rand = Str::random(10);
+            $name_file = pathinfo($request->petunjuk_tugas_file->getClientOriginalName(), PATHINFO_FILENAME) . ' - ' . $rand . "." . $request->petunjuk_tugas_file->getClientOriginalExtension();
+            $request->file('petunjuk_tugas_file')->move('dokumen/petunjuk_tugas_file', $name_file);
+            $izin_guru->petunjuk_tugas_file = $name_file;
+            $izin_guru->save();
+        }
+
+        if ($request->hasFile('surat_izin')) {
+            $rand = Str::random(10);
+            $name_file = pathinfo($request->surat_izin->getClientOriginalName(), PATHINFO_FILENAME) . ' - ' . $rand . "." . $request->surat_izin->getClientOriginalExtension();
+            $request->file('surat_izin')->move('dokumen/surat_izin', $name_file);
+            $izin_guru->surat_izin = $name_file;
+            $izin_guru->save();
+        }
+
+        AktivitasGuruIzin::create([
+            'izin_guru_id' => $izin_guru->id,
+            'user_id' => auth()->user()->id
+        ]);
+
+        return redirect('/result')->with('success', 'izin');
+    }
+
+
+    public function refleksiIndex()
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'guru') {
+            $month = date('m') != date('m', strtotime('+1 week')) ? date('Y-m') : date('Y-m', strtotime('-1 month', strtotime(date('Y-m-d'))));
+
+            $time = Carbon::now();
+            $aktivitas_refleksi_guru = AktivitasGuruRefleksi::where("user_id", auth()->user()->id)->whereMonth('created_at', explode('-', $month)[1])->whereYear('created_at', explode('-', $month)[0])->get();
+            $siswa = Siswa::all();
+            $user = Guru::where('user_id', auth()->user()->id)->get();
+            $user = $user[0];
+            $is_last_week = '';
+
+            $mata_pelajaran = MataPelajaran::all();
+
+            return view('refleksi', compact('time', 'aktivitas_refleksi_guru', 'is_last_week', 'siswa', 'user', 'mata_pelajaran'));
+        } else if (auth()->user()->role == 'siswa') {
+            $tahun_pelajaran = '';
+            $semester = '';
+
+            if (date('n') >= 1 && date('n') <= 6) {
+                $tahun_pelajaran = (intval(date('Y')) - 1) . '/' . (intval(date('Y')));
+            } else if (date('n') >= 6 && date('n') <= 12) {
+                $tahun_pelajaran = intval(date('Y')) . '/' . (intval(date('Y')) + 1);
+            }
+
+            if (date('n') >= 7 && date('n') <= 9) {
+                $semester = '0.5';
+            } else if (date('n') >= 10 && date('n') <= 12) {
+                $semester = '1';
+            } else if (date('n') >= 1 && date('n') <= 3) {
+                $semester = '1.5';
+            } else if (date('n') >= 4 && date('n') <= 6) {
+                $semester = '2';
+            }
+
+
+            $time = Carbon::now();
+            $data_refleksi_siswa = RefleksiSiswa::where('tahun_pelajaran', $tahun_pelajaran)->where('semester', $semester)->where('kelas', auth()->user()->siswa->kelas)->where('nama', auth()->user()->siswa->nama)->get();
+
+            $data_refleksi_siswa_id = [];
+
+            foreach ($data_refleksi_siswa as $refleksi_siswa) {
+                array_push($data_refleksi_siswa_id, $refleksi_siswa->id);
+            }
+
+            $data_aktivitas_refleksi_siswa = AktivitasSiswaRefleksi::whereIn('refleksi_siswa_id', $data_refleksi_siswa_id)->where("user_id", auth()->user()->id)->get();
+            $data_guru_mata_pelajaran = GuruMataPelajaran::where('kelas', auth()->user()->siswa->kelas)->get();
+            $user = Siswa::where('user_id', auth()->user()->id)->get()->first();
+            $user = $user[0];
+
+            if (count($data_refleksi_siswa)) {
+                $is_filled = $data_refleksi_siswa->first()->created_at->format('Y-m-d') === date('Y-m-d') ? true : false;
+            } else {
+                $is_filled = false;
+            }
+
+            return view('refleksi', compact('time', 'data_aktivitas_refleksi_siswa', 'data_guru_mata_pelajaran', 'user', 'is_filled'));
+        }
+    }
+
+
+    public function refleksiStore(Request $request)
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'guru') {
+            $request->validate([
+                'kelas' => 'required',
+                'mata_pelajaran' => 'required',
+                'pertanyaan1' => 'required',
+                'pertanyaan2' => 'required',
+                'pertanyaan3' => 'required',
+                'pertanyaan4' => 'required',
+                'pertanyaan5' => 'required',
+                'pertanyaan6' => 'required',
+                'pertanyaan7' => 'required',
+                'pertanyaan8' => 'required',
+            ]);
+
+            $refleksi_guru = RefleksiGuru::create([
+                "nama" => auth()->user()->guru->nama,
+                "bulan" => date('m') != date('m', strtotime('+1 week')) ? date('Y-m') : date('Y-m', strtotime('-1 month', strtotime(date('Y-m-d')))),
+                "kelas" => $request->kelas,
+                "mata_pelajaran" => $request->mata_pelajaran,
+                "pertanyaan1" => $request->pertanyaan1,
+                "pertanyaan2" => $request->pertanyaan2,
+                "pertanyaan3" => $request->pertanyaan3,
+                "pertanyaan4" => $request->pertanyaan4,
+                "pertanyaan5" => $request->pertanyaan5,
+                "pertanyaan6" => $request->pertanyaan6,
+                "pertanyaan7" => $request->pertanyaan7,
+                "pertanyaan8" => $request->pertanyaan8,
+            ]);
+
+            AktivitasGuruRefleksi::create([
+                'refleksi_guru_id' => $refleksi_guru->id,
+                'user_id' => auth()->user()->id
+            ]);
+
+            return redirect('/result')->with('success', 'refleksi');
+        } else if (auth()->user()->role == 'siswa') {
+            $request->validate([
+                'guru_mata_pelajaran' => 'required',
+                'pertanyaan1' => 'required',
+                'pertanyaan2' => 'required',
+                'pertanyaan3' => 'required',
+                'pertanyaan4' => 'required',
+            ]);
+
+            $guru_mata_pelajaran = GuruMataPelajaran::find($request->guru_mata_pelajaran);
+
+            $tahun_pelajaran = '';
+            $semester = '';
+
+            if (date('n') >= 1 && date('n') <= 6) {
+                $tahun_pelajaran = (intval(date('Y')) - 1) . '/' . (intval(date('Y')));
+            } else if (date('n') >= 6 && date('n') <= 12) {
+                $tahun_pelajaran = intval(date('Y')) . '/' . (intval(date('Y')) + 1);
+            }
+
+            if (date('n') >= 7 && date('n') <= 9) {
+                $semester = '0.5';
+            } else if (date('n') >= 10 && date('n') <= 12) {
+                $semester = '1';
+            } else if (date('n') >= 1 && date('n') <= 3) {
+                $semester = '1.5';
+            } else if (date('n') >= 4 && date('n') <= 6) {
+                $semester = '2';
+            }
+
+            $refleksi_siswa = RefleksiSiswa::create([
+                "tahun_pelajaran" => $tahun_pelajaran,
+                "semester" => $semester,
+                "nis" => auth()->user()->siswa->nis,
+                "nama" => auth()->user()->siswa->nama,
+                "kelas" => auth()->user()->siswa->kelas,
+                "guru" => $guru_mata_pelajaran->guru->nama,
+                "mata_pelajaran" => $guru_mata_pelajaran->mata_pelajaran->nama,
+                "pertanyaan1" => $request->pertanyaan1,
+                "pertanyaan2" => $request->pertanyaan2,
+                "pertanyaan3" => $request->pertanyaan3,
+                "pertanyaan4" => $request->pertanyaan4,
+                "pertanyaan5" => $request->pertanyaan5,
+                "pertanyaan6" => $request->pertanyaan6,
+                "pertanyaan7" => $request->pertanyaan7,
+            ]);
+
+            $tanggal = Carbon::parse($refleksi_siswa->created_at)->format('Y-m-d H:i');
+
+            AktivitasSiswaRefleksi::create([
+                'refleksi_siswa_id' => $refleksi_siswa->id,
+                'user_id' => auth()->user()->id
+            ]);
+
+            return redirect('/result?refleksi_siswa=' . $refleksi_siswa->id . '&mata_pelajaran=' . $guru_mata_pelajaran->mata_pelajaran->kode)->with('success', 'refleksi')->with('refleksi_siswa', $refleksi_siswa)->with('tanggal', $tanggal);
+        }
+    }
+
+    public function result()
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role === 'guru') {
+            return view('result');
+        } else if (auth()->user()->role === 'siswa') {
+            $tahun_pelajaran = '';
+            $semester = '';
+
+            if (date('n') >= 1 && date('n') <= 6) {
+                $tahun_pelajaran = (intval(date('Y')) - 1) . '/' . (intval(date('Y')));
+            } else if (date('n') >= 6 && date('n') <= 12) {
+                $tahun_pelajaran = intval(date('Y')) . '/' . (intval(date('Y')) + 1);
+            }
+
+            if (date('n') >= 7 && date('n') <= 9) {
+                $semester = '0.5';
+            } else if (date('n') >= 10 && date('n') <= 12) {
+                $semester = '1';
+            } else if (date('n') >= 1 && date('n') <= 3) {
+                $semester = '1.5';
+            } else if (date('n') >= 4 && date('n') <= 6) {
+                $semester = '2';
+            }
+
+            $mata_pelajaran = MataPelajaran::where('kode', request()->mata_pelajaran)->first();
+
+            if ($mata_pelajaran) {
+                $data_guru_mata_pelajaran = GuruMataPelajaran::where('kelas', auth()->user()->siswa->kelas)->where('mata_pelajaran_id', $mata_pelajaran->id)->get();
+
+                $data_refleksi_siswa = RefleksiSiswa::where('tahun_pelajaran', $tahun_pelajaran)->where('semester', $semester)->where('mata_pelajaran', $mata_pelajaran->nama)->where('kelas', auth()->user()->siswa->kelas)->where('nama', auth()->user()->siswa->nama)->get();
+
+                $is_complete = count($data_guru_mata_pelajaran) <= count($data_refleksi_siswa) ? true : false;
+            } else {
+                $is_complete = false;
+            }
+
+            return view('result', [
+                'mata_pelajaran' => $mata_pelajaran,
+                'is_complete' => $is_complete,
+            ]);
+        }
+    }
+
+    public function rekapIndex(Request $request)
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'guru') {
+            date_default_timezone_set("Asia/Jakarta");
+
+            if ($request->has('search1') && $request->search2 == null) {
+                $jurnal_guru = DB::table('jurnal_guru')
+                    ->select([
+                        DB::raw('count(*) as jumlah'),
+                        DB::raw('DATE(tanggal) as tanggal')
+                    ])
+                    ->groupBy('tanggal')
+                    ->where('tanggal', 'LIKE', '%' . $request->search1 . '%');
+
+                if ($request->kelas !== null) {
+                    $jurnal_guru = $jurnal_guru->where('kelas', $request->kelas)
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                } else {
+                    $jurnal_guru = $jurnal_guru
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                }
+            } else if ($request->has('search2') && $request->search1 == null) {
+                $jurnal_guru = DB::table('jurnal_guru')
+                    ->select([
+                        DB::raw('count(*) as jumlah'),
+                        DB::raw('DATE(tanggal) as tanggal')
+                    ])
+                    ->groupBy('tanggal')
+                    ->where('tanggal', 'LIKE', '%' . $request->search2 . '%');
+
+                if ($request->kelas !== null) {
+                    $jurnal_guru = $jurnal_guru->where('kelas', $request->kelas)
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                } else {
+                    $jurnal_guru = $jurnal_guru
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                }
+            } else if ($request->has('search1') && $request->has('search2')) {
+                $jurnal_guru = DB::table('jurnal_guru')
+                    ->select([
+                        DB::raw('count(*) as jumlah'),
+                        DB::raw('DATE(tanggal) as tanggal')
+                    ])
+                    ->groupBy('tanggal')
+                    ->whereBetween('tanggal', [DATE($request->search1), DATE($request->search2)]);
+
+                if ($request->kelas !== null) {
+                    $jurnal_guru = $jurnal_guru->where('kelas', $request->kelas)
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                } else {
+                    $jurnal_guru = $jurnal_guru
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                        ->toArray();
+                }
+            } else {
+                $jurnal_guru = [];
+            }
+
+            $siswa = Siswa::all();
+
+            session(['search1' => $request->search1, 'search2' => $request->search2, 'kelas' => $request->kelas]);
+
+            return view('rekap', ['jurnal_guru' => $jurnal_guru, 'siswa' => $siswa, 'request' => $request]);
+        }
+    }
+
+    public function rekapExport()
+    {
+        return Excel::download(new JurnalGuruExport(), 'Jurnal Guru SMK Muhammadiyah 1 Sukoharjo - ' . '.xlsx');
+    }
+
+    public function sertifikatIndex()
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'siswa') {
+            $data_aktifitas_siswa_sertifikat = AktivitasSiswaSertifikat::where('user_id', auth()->user()->id)->get();
+
+            return view('sertifikat', compact('data_aktifitas_siswa_sertifikat'));
+        }
+    }
+
+    public function sertifikatPrint($siswa_sertifikat_id)
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        $siswa_sertifikat = SiswaSertifikat::find($siswa_sertifikat_id);
+
+        $html = "
+                    <html>
+                    <head>
+                    </head>
+                    <body style='font-family: Arial;font-size: 14px;'>
+                        <div style='text-align: center;margin: 0 0 48px;'>
+                            <img src='" . asset('/img/logo-smk.png') . "' style='width: 56px;'>
+                        </div>
+                        <h2 style='font-size: 20px;text-align: center; margin: 0 0 4px;'>SERTIFIKASI UJI KOMPETENSI</h2>
+                        <p style='text-align: center; margin: 0 0 32px;'>Nomor: " . $siswa_sertifikat->sertifikat->nomor . "</p>
+                        <p style='text-align: center; margin: 0 0 8px;'>Dengan ini menyatakan bahwa,</p>
+                        <h2 style='font-size: 20px;text-align: center; margin: 0 0 4px;'>" . $siswa_sertifikat->nama . "</h2>
+                        <h4 style='text-align: center; margin: 0 0 32px;'>NIS:" . $siswa_sertifikat->nis . "</h4>
+                        <p style='text-align: center; margin: 0 0 8px;'>pada Program Keahlian</p>
+                        <h2 style='font-size: 20px;text-align: center; margin: 0 0 32px;'>Rekayasa Perangkat Lunak</h2>
+                        <p style='text-align: center; margin: 0 0 8px;'>pada Judul Penugasan</p>
+                        <h4 style='font-size: 16px;text-align: center; margin: 0 0 32px;'>" . $siswa_sertifikat->penugasan . "</h4>
+                        <p style='text-align: center; margin: 0 0 8px;'>dengan Predikat</p>
+                        <h3 style='font-size: 16px;text-align: center; margin: 0 0 106px;'>" . $siswa_sertifikat->predikat . "</h3>
+                        <p style='text-align: center; margin: 0 0 8px;'>" . $siswa_sertifikat->sertifikat->tempat . ", " . Carbon::parse($siswa_sertifikat->sertifikat->tanggal)->locale(App::getLocale())->isoFormat('DD MMMM YYYY') . "</p>
+                    </body>
+                ";
+
+        $mpdf = new Mpdf();
+        $mpdf->AddPage('P');
+        $mpdf->showImageErrors = true;
+        $mpdf->WriteHTML($html);
+
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(24, 220);
+        $mpdf->WriteCell(6.4, 0.4, 'Atas nama SMK Muhammadiyah 1 Sukoharjo', 0, 'C');
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(24, 244);
+        $mpdf->WriteCell(6.4, 0.4, 'Drs. BAMBANG SAHANA, M.Pd', 0, 'C');
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(24, 250);
+        $mpdf->WriteCell(6.4, 0.4, 'Kepala Sekolah', 0, 'C');
+
+
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(140, 220);
+        $mpdf->WriteCell(6.4, 0.4, $siswa_sertifikat->sertifikat->perusahaan_penguji, 0, 'C');
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(140, 244);
+        $mpdf->WriteCell(6.4, 0.4, $siswa_sertifikat->sertifikat->nama_penguji, 0, 'C');
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(140, 250);
+        $mpdf->WriteCell(6.4, 0.4, 'Penguji Eksternal', 0, 'C');
+
+        $mpdf->Image(asset('/img/bg-sertifikat-front.png'), 0, 0, 'auto', 298, 'png', '', true, false);
+        $mpdf->Image(asset('/img/logo-kepsek.png'), 24, 226, 'auto', 24, 'png', '', true, false);
+        $mpdf->Image(asset('/img/cap-sekolah.png'), 12, 226, 'auto', 32, 'png', '', true, false);
+        $mpdf->Image(asset('/dokumen/sertifikat/' . $siswa_sertifikat->sertifikat->ttd_penguji), 140, 226, 'auto', 24, 'png', '', true, false);
+
+        $data_kompetensi = explode('_', $siswa_sertifikat->kompetensi);
+
+        $html_kompetensi = '';
+
+        foreach ($data_kompetensi as $key => $item) {
+            $html_kompetensi .=
+                "<tr>
+                    <td style='width: 24px;text-align: center;'>" . ($key + 1) . "</td>
+                    <td>" . $item . "</td>
+                </tr>";
+        }
+
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(24, 284);
+        $mpdf->WriteCell(6.4, 0.4, '', 0, 'C');
+
+        $html2 = "
+                    <html>
+                    <head>
+                        <style>
+                        table {
+                            border-collapse: collapse;
+                        }
+                        th, td {
+                            padding: 4px 8px;
+                        }
+                        </style>
+                    </head>
+                    <body style='font-family: Arial;font-size: 12px;'>
+                        <h3 style='text-align: center; margin: 0 0 16px;font-weight: 400;'>DAFTAR KOMPETENSI</h3>
+                        <table border='1' style='width: 100%;'>
+                            <thead>
+                                <tr>
+                                    <th style='width: 24px;text-align: center;'>No</th>
+                                    <th>Judul Kompetensi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               " . $html_kompetensi . "
+                            </tbody>
+                        </table>
+                    </body>
+                ";
+
+        $mpdf->showImageErrors = true;
+        $mpdf->WriteHTML($html2);
+
+        $mpdf->Image(asset('/img/bg-sertifikat-back.png'), 0, 0, 'auto', 298, 'png', '', true, false);
+
+        $mpdf->Output('Sertifikat Kompetensi - SMK Muhammadiyah 1 Sukoharjo' . '.pdf', 'I');
+        exit;
+    }
+}
