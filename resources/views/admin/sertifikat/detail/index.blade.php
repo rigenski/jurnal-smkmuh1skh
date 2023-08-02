@@ -38,6 +38,7 @@
                             <th scope="col">NIS</th>
                             <th scope="col">Nama</th>
                             <th scope="col">Kelas</th>
+                            <th scope="col">Predikat</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -51,8 +52,11 @@
                                 <td>{{ $item->nis }}</td>
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ $item->kelas }}</td>
+                                <td><span
+                                        class="{{ $item->predikat === 'Belum Kompeten' ? 'text-danger' : '' }}">{{ $item->predikat }}</span>
+                                </td>
                                 <td>
-                                    <a href="/admin/sertifikat/{{ $id }}/{{ $item->id }}/print"
+                                    <a href="{{ route('admin.sertifikat.print', ['id' => $id, 'siswa_sertifikat_id' => $item->id]) }}"
                                         class="btn btn-primary mb-2">Cetak</a>
                                     <a href="#modalEdit" data-toggle="modal"
                                         onclick="$('#modalEdit #formEdit').attr('action', '{{ $id }}/{{ $item->id }}/update'); $('#modalEdit #formEdit #nis').attr('value', '{{ $item->nis }}'); $('#modalEdit #formEdit #nama').attr('value', '{{ $item->nama }}'); $('#modalEdit #formEdit #kelas').attr('value', '{{ $item->kelas }}'); $('#modalEdit #formEdit #penugasan').attr('value', '{{ $item->penugasan }}'); $('#modalEdit #formEdit #predikat').attr('value', '{{ $item->predikat }}'); $('#modalEdit #formEdit #kompetensi').attr('value', '{{ $item->kompetensi }}');"

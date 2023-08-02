@@ -42,7 +42,7 @@
                         <form class="p-4 w-full max-w-2xl bg-white rounded-lg shadow-lg md:p-8"
                             action="{{ route('refleksi.store') }}" method="post" enctype="multipart/form-data">
                             {{ csrf_field() }}
-                            <h4 class="mb-2 text-2xl font-semibold text-gray-800 lg:text-3xl">Refleksi Guru</h4>
+                            <h4 class="mb-2 text-2xl font-semibold text-gray-800 lg:text-3xl">Refleksi</h4>
                             <p class="mb-8 text-sm font-normal text-gray-600 lg:text-base">Bulan
                                 {{ date('m') != date('m', strtotime('+1 week')) ? date('F') : date('F', strtotime('-1 month', strtotime(date('Y-m-d')))) }}
                                 <br /> Tahun
@@ -437,7 +437,7 @@
                         <form class="p-4 w-full max-w-2xl bg-white rounded-lg shadow-lg md:p-8"
                             action="{{ route('refleksi.store') }}" method="post" enctype="multipart/form-data">
                             {{ csrf_field() }}
-                            <h4 class="mb-2 text-2xl font-semibold text-gray-800 lg:text-3xl">Refleksi Siswa</h4>
+                            <h4 class="mb-2 text-2xl font-semibold text-gray-800 lg:text-3xl">Refleksi</h4>
                             <p class="mb-8 text-sm font-normal text-gray-600 lg:text-base">Semester
                                 {{ date('n') <= 6 ? '2' : '1' }}
                                 <br /> Tahun

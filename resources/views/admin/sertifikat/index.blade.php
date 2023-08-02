@@ -58,7 +58,8 @@
                                 <td>{{ $data->perusahaan_penguji }}</td>
                                 <td>{{ $data->siswa_sertifikat->count() }}</td>
                                 <td>
-                                    <a href="/admin/sertifikat/{{ $data->id }}" class="btn btn-primary mb-2">Daftar
+                                    <a href="{{ route('admin.sertifikat.detail', ['id' => $data->id]) }}"
+                                        class="btn btn-primary mb-2">Daftar
                                         Siswa</a>
                                     <a href="#modalEdit" data-toggle="modal"
                                         onclick="$('#modalEdit #formEdit').attr('action', 'sertifikat/{{ $data->id }}/update'); $('#modalEdit #formEdit #nomor').attr('value', '{{ $data->nomor }}'); $('#modalEdit #formEdit #tempat').attr('value', '{{ $data->tempat }}'); $('#modalEdit #formEdit #tanggal').attr('value', '{{ $data->tanggal }}'); $('#modalEdit #formEdit #perusahaan_penguji').attr('value', '{{ $data->perusahaan_penguji }}'); $('#modalEdit #formEdit #nama_penguji').attr('value', '{{ $data->nama_penguji }}');"

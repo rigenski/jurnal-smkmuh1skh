@@ -70,4 +70,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(AktivitasSiswaRefleksi::class);
     }
+    public function aktivitas_siswa_sertifikat()
+    {
+        return $this->hasMany(AktivitasSiswaSertifikat::class);
+    }
 }

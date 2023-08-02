@@ -175,7 +175,7 @@ class SertifikatController extends Controller
                         <h2 style='font-size: 24px;text-align: center; margin: 0 0 4px;'>" . $siswa_sertifikat->nama . "</h2>
                         <h4 style='text-align: center; margin: 0 0 32px;'>NIS:" . $siswa_sertifikat->nis . "</h4>
                         <p style='text-align: center; margin: 0 0 8px;'>pada Program Keahlian</p>
-                        <h2 style='font-size: 20px;text-align: center; margin: 0 0 32px;'>Rekayasa Perangkat Lunak</h2>
+                        <h2 style='font-size: 20px;text-align: center; margin: 0 0 32px;'>" . $siswa_sertifikat->keahlian . "</h2>
                         <p style='text-align: center; margin: 0 0 8px;'>pada Judul Penugasan</p>
                         <h4 style='font-size: 16px;text-align: center; margin: 0 0 32px;'>" . $siswa_sertifikat->penugasan . "</h4>
                         <p style='text-align: center; margin: 0 0 8px;'>dengan Predikat</p>
@@ -190,13 +190,13 @@ class SertifikatController extends Controller
         $mpdf->WriteHTML($html);
 
         $mpdf->SetFont('', '', 10);
-        $mpdf->SetXY(24, 220);
+        $mpdf->SetXY(16, 220);
         $mpdf->WriteCell(6.4, 0.4, 'Atas nama SMK Muhammadiyah 1 Sukoharjo', 0, 'C');
         $mpdf->SetFont('', '', 10);
-        $mpdf->SetXY(24, 244);
+        $mpdf->SetXY(16, 244);
         $mpdf->WriteCell(6.4, 0.4, 'Drs. BAMBANG SAHANA, M.Pd', 0, 'C');
         $mpdf->SetFont('', '', 10);
-        $mpdf->SetXY(24, 250);
+        $mpdf->SetXY(16, 250);
         $mpdf->WriteCell(6.4, 0.4, 'Kepala Sekolah', 0, 'C');
 
 
@@ -210,9 +210,13 @@ class SertifikatController extends Controller
         $mpdf->SetXY(140, 250);
         $mpdf->WriteCell(6.4, 0.4, 'Penguji Eksternal', 0, 'C');
 
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(16, 280);
+        $mpdf->WriteCell(6.4, 0.4, 'No. ' . $siswa_sertifikat->nis . '/' . Carbon::parse($siswa_sertifikat->sertifikat->tanggal)->locale(App::getLocale())->isoFormat('DDMMYY'), 0, 'C');
+
         $mpdf->Image(asset('/img/bg-sertifikat-front.png'), 0, 0, 'auto', 298, 'png', '', true, false);
-        $mpdf->Image(asset('/img/logo-kepsek.png'), 24, 226, 'auto', 24, 'png', '', true, false);
-        $mpdf->Image(asset('/img/cap-sekolah.png'), 12, 226, 'auto', 32, 'png', '', true, false);
+        $mpdf->Image(asset('/img/logo-kepsek.png'), 16, 226, 'auto', 24, 'png', '', true, false);
+        $mpdf->Image(asset('/img/cap-sekolah.png'), 8, 226, 'auto', 32, 'png', '', true, false);
         $mpdf->Image(asset('/dokumen/sertifikat/' . $siswa_sertifikat->sertifikat->ttd_penguji), 140, 226, 'auto', 24, 'png', '', true, false);
 
         $data_kompetensi = explode('_', $siswa_sertifikat->kompetensi);
@@ -230,6 +234,7 @@ class SertifikatController extends Controller
         $mpdf->SetFont('', '', 10);
         $mpdf->SetXY(24, 284);
         $mpdf->WriteCell(6.4, 0.4, '', 0, 'C');
+
 
         $html2 = "
                     <html>
@@ -261,6 +266,10 @@ class SertifikatController extends Controller
 
         $mpdf->showImageErrors = true;
         $mpdf->WriteHTML($html2);
+
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(16, 280);
+        $mpdf->WriteCell(6.4, 0.4, 'No. ' . $siswa_sertifikat->nis . '/' . Carbon::parse($siswa_sertifikat->sertifikat->tanggal)->locale(App::getLocale())->isoFormat('DDMMYY'), 0, 'C');
 
         $mpdf->Image(asset('/img/bg-sertifikat-back.png'), 0, 0, 'auto', 298, 'png', '', true, false);
 

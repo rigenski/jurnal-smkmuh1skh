@@ -13,4 +13,9 @@ class SiswaSertifikat extends Model
     {
         return $this->belongsTo(Sertifikat::class);
     }
+
+    public function aktivitas_siswa_sertifikat()
+    {
+        return $this->hasOne(AktivitasSiswaSertifikat::class);
+    }
 }
