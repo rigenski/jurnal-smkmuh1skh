@@ -61,4 +61,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(AktivitasGuruRefleksi::class);
     }
+<<<<<<< HEAD
+=======
+    public function aktivitas_siswa_refleksi()
+    {
+        return $this->hasMany(AktivitasSiswaRefleksi::class);
+    }
+    public function aktivitas_siswa_sertifikat()
+    {
+        return $this->hasMany(AktivitasSiswaSertifikat::class);
+    }
+>>>>>>> 7f38a57 (feat: added refleksi siswa dan guru)
 }

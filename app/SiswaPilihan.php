@@ -9,7 +9,7 @@ class SiswaPilihan extends Model
     protected $table = 'siswa_pilihan';
     protected $guarded = [];
 
-    public function jurnal()
+    public function jurnal_guru()
     {
         return $this->belongsTo(JurnalGuru::class);
     }

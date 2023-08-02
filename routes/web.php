@@ -33,11 +33,18 @@ Route::group(['middleware' => ['auth', 'checkRole:guru,karyawan']], function () 
     Route::get('/izin', 'FrontController@izinIndex')->name('izin');
     Route::get('/refleksi', 'FrontController@refleksiIndex')->name('refleksi');
     Route::get('/rekap', 'FrontController@rekapIndex')->name('rekap');
+    Route::get('/kehadiran', 'FrontController@kehadiranIndex')->name('kehadiran');
     Route::post('/jurnal/store', 'FrontController@jurnalStore')->name('jurnal.store');
     Route::post('/izin/store', 'FrontController@izinStore')->name('izin.store');
     Route::post('/refleksi/store', 'FrontController@refleksiStore')->name('refleksi.store');
     Route::get('/rekap/export', 'FrontController@rekapExport')->name('rekap.export');
     Route::get('/result', 'FrontController@result')->name('result');
+<<<<<<< HEAD
+=======
+    Route::get('/sertifikat', 'FrontController@sertifikatIndex')->name('sertifikat');
+    Route::get('/sertifikat/{siswa_sertifikat_id}/print', 'FrontController@sertifikatPrint')->name('sertifikat.print');
+    Route::get('/sertifikat/info', 'FrontController@sertifikatInfoIndex')->name('sertifikat.info');
+>>>>>>> 7f38a57 (feat: added refleksi siswa dan guru)
 });
 
 Route::group(['middleware' => ['auth', 'checkRole:admin']], function () {

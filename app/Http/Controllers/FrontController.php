@@ -340,9 +340,216 @@ class FrontController extends Controller
 
     public function rekapExport()
     {
+<<<<<<< HEAD
         $search1 = session()->get('search1');
         $search2 = session()->get('search2');
 
         return Excel::download(new JurnalGuruExport(), 'Jurnal Guru SMK Muhammadiyah 1 Sukoharjo - ' . '.xlsx');
     }
+=======
+        return Excel::download(new JurnalGuruExport(), 'Rekap Absensi Guru SMK Muhammadiyah 1 Sukoharjo - ' . '.xlsx');
+    }
+
+    public function sertifikatIndex(Request $request)
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'siswa') {
+            $data_aktifitas_siswa_sertifikat = AktivitasSiswaSertifikat::where('user_id', auth()->user()->id)->get();
+
+            return view('sertifikat', compact('data_aktifitas_siswa_sertifikat'));
+        } else if (auth()->user()->role === 'guru') {
+            date_default_timezone_set("Asia/Jakarta");
+
+            if ($request->has('angkatan') && $request->has('kelas')) {
+                $data_siswa = Siswa::where('kelas', $request->kelas)->get();
+                $data_siswa_sertifikat = SiswaSertifikat::all();
+            } else {
+                $data_siswa = [];
+                $data_siswa_sertifikat = [];
+            }
+
+            $siswa = Siswa::all();
+
+            return view('sertifikat', ['siswa' => $siswa, 'data_siswa' => $data_siswa, 'data_siswa_sertifikat' => $data_siswa_sertifikat, 'request' => $request]);
+        }
+    }
+
+    public function sertifikatPrint($siswa_sertifikat_id)
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        $siswa_sertifikat = SiswaSertifikat::find($siswa_sertifikat_id);
+
+        $html = "
+                    <html>
+                    <head>
+                    </head>
+                    <body style='font-family: Arial;font-size: 14px;'>
+                        <div style='text-align: center;margin: 0 0 48px;'>
+                            <img src='" . asset('/img/logo-smk.png') . "' style='width: 64px;'>
+                        </div>
+                        <h2 style='font-size: 24px;text-align: center; margin: 0 0 4px;'>SERTIFIKASI UJI KOMPETENSI</h2>
+                        <p style='text-align: center; margin: 0 0 32px;'>Nomor: " . $siswa_sertifikat->sertifikat->nomor . "</p>
+                        <p style='text-align: center; margin: 0 0 8px;'>Dengan ini menyatakan bahwa,</p>
+                        <h2 style='font-size: 24px;text-align: center; margin: 0 0 4px;'>" . $siswa_sertifikat->nama . "</h2>
+                        <h4 style='text-align: center; margin: 0 0 32px;'>NIS:" . $siswa_sertifikat->nis . "</h4>
+                        <p style='text-align: center; margin: 0 0 8px;'>pada Program Keahlian</p>
+                        <h2 style='font-size: 20px;text-align: center; margin: 0 0 32px;'>" . $siswa_sertifikat->keahlian . "</h2>
+                        <p style='text-align: center; margin: 0 0 8px;'>pada Judul Penugasan</p>
+                        <h4 style='font-size: 16px;text-align: center; margin: 0 0 32px;'>" . $siswa_sertifikat->penugasan . "</h4>
+                        <p style='text-align: center; margin: 0 0 8px;'>dengan Predikat</p>
+                        <h3 style='font-size: 16px;text-align: center; margin: 0 0 106px;'>" . $siswa_sertifikat->predikat . "</h3>
+                        <p style='text-align: center; margin: 0 0 8px;'>" . $siswa_sertifikat->sertifikat->tempat . ", " . Carbon::parse($siswa_sertifikat->sertifikat->tanggal)->locale(App::getLocale())->isoFormat('DD MMMM YYYY') . "</p>
+                    </body>
+                ";
+
+        $mpdf = new Mpdf();
+        $mpdf->AddPage('P');
+        $mpdf->showImageErrors = true;
+        $mpdf->WriteHTML($html);
+
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(16, 220);
+        $mpdf->WriteCell(6.4, 0.4, 'Atas nama SMK Muhammadiyah 1 Sukoharjo', 0, 'C');
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(16, 244);
+        $mpdf->WriteCell(6.4, 0.4, 'Drs. BAMBANG SAHANA, M.Pd', 0, 'C');
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(16, 250);
+        $mpdf->WriteCell(6.4, 0.4, 'Kepala Sekolah', 0, 'C');
+
+
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(140, 220);
+        $mpdf->WriteCell(6.4, 0.4, $siswa_sertifikat->sertifikat->perusahaan_penguji, 0, 'C');
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(140, 244);
+        $mpdf->WriteCell(6.4, 0.4, $siswa_sertifikat->sertifikat->nama_penguji, 0, 'C');
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(140, 250);
+        $mpdf->WriteCell(6.4, 0.4, 'Penguji Eksternal', 0, 'C');
+
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(16, 280);
+        $mpdf->WriteCell(6.4, 0.4, 'No. ' . $siswa_sertifikat->nis . '/' . Carbon::parse($siswa_sertifikat->sertifikat->tanggal)->locale(App::getLocale())->isoFormat('DDMMYY'), 0, 'C');
+
+        $mpdf->Image(asset('/img/bg-sertifikat-front.png'), 0, 0, 'auto', 298, 'png', '', true, false);
+        $mpdf->Image(asset('/img/logo-kepsek.png'), 16, 226, 'auto', 24, 'png', '', true, false);
+        $mpdf->Image(asset('/img/cap-sekolah.png'), 8, 226, 'auto', 32, 'png', '', true, false);
+        $mpdf->Image(asset('/dokumen/sertifikat/' . $siswa_sertifikat->sertifikat->ttd_penguji), 140, 226, 'auto', 24, 'png', '', true, false);
+
+        $data_kompetensi = explode('_', $siswa_sertifikat->kompetensi);
+
+        $html_kompetensi = '';
+
+        foreach ($data_kompetensi as $key => $item) {
+            $html_kompetensi .=
+                "<tr>
+                    <td style='width: 24px;text-align: center;'>" . ($key + 1) . "</td>
+                    <td>" . $item . "</td>
+                </tr>";
+        }
+
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(24, 284);
+        $mpdf->WriteCell(6.4, 0.4, '', 0, 'C');
+
+
+        $html2 = "
+                    <html>
+                    <head>
+                        <style>
+                        table {
+                            border-collapse: collapse;
+                        }
+                        th, td {
+                            padding: 4px 8px;
+                        }
+                        </style>
+                    </head>
+                    <body style='font-family: Arial;font-size: 12px;'>
+                        <h3 style='text-align: center; margin: 0 0 16px;font-weight: 400;'>DAFTAR KOMPETENSI</h3>
+                        <table border='1' style='width: 100%;'>
+                            <thead>
+                                <tr>
+                                    <th style='width: 24px;text-align: center;'>No</th>
+                                    <th>Judul Kompetensi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               " . $html_kompetensi . "
+                            </tbody>
+                        </table>
+                    </body>
+                ";
+
+        $mpdf->showImageErrors = true;
+        $mpdf->WriteHTML($html2);
+
+        $mpdf->SetFont('', '', 10);
+        $mpdf->SetXY(16, 280);
+        $mpdf->WriteCell(6.4, 0.4, 'No. ' . $siswa_sertifikat->nis . '/' . Carbon::parse($siswa_sertifikat->sertifikat->tanggal)->locale(App::getLocale())->isoFormat('DDMMYY'), 0, 'C');
+
+        $mpdf->Image(asset('/img/bg-sertifikat-back.png'), 0, 0, 'auto', 298, 'png', '', true, false);
+
+        $mpdf->Output('Sertifikat Kompetensi - SMK Muhammadiyah 1 Sukoharjo' . '.pdf', 'I');
+        exit;
+    }
+
+    public function sertifikatInfoIndex(Request $request)
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'siswa') {
+            return view('sertifikat/info', compact('request'));
+        }
+    }
+
+
+    public function kehadiranIndex(Request $request)
+    {
+        date_default_timezone_set("Asia/Jakarta");
+
+        if (auth()->user()->role == 'siswa') {
+            date_default_timezone_set("Asia/Jakarta");
+
+            if ($request->has('search1') && $request->search2 == null) {
+                $data_jurnal_guru = JurnalGuru::with(['siswa_pilihan'])->where('kelas', auth()->user()->siswa->kelas)
+                    ->where('tanggal', 'LIKE', '%' . $request->search1 . '%')->get();
+            } else if ($request->has('search2') && $request->search1 == null) {
+                $data_jurnal_guru = JurnalGuru::with(['siswa_pilihan'])->where('kelas', auth()->user()->siswa->kelas)
+                    ->where('tanggal', 'LIKE', '%' . $request->search2 . '%')->get();
+            } else if ($request->has('search1') && $request->has('search2')) {
+                $data_jurnal_guru = JurnalGuru::with(['siswa_pilihan'])->where('kelas', auth()->user()->siswa->kelas)
+                    ->whereBetween('tanggal', [DATE($request->search1), DATE($request->search2)])->get();
+            } else {
+                $data_jurnal_guru = [];
+            }
+
+            $data_tanggal = [];
+
+            if (count($data_jurnal_guru)) {
+                $tanggal_awal = Carbon::createFromFormat('Y-m-d', $request->search1);
+                $tanggal_akhir = Carbon::createFromFormat('Y-m-d', $request->search2);
+
+                for ($date = $tanggal_awal; $date <= $tanggal_akhir; $date->addDay()) {
+                    $data_tanggal[] = $date->format('Y-m-d');
+                }
+            }
+
+            $data_jam = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+
+            $data_jurnal_guru_group = [];
+
+            foreach ($data_tanggal as $tanggal) {
+                $data_jurnal_guru_group[$tanggal] = collect($data_jurnal_guru)->where('tanggal', $tanggal)->all();
+            }
+
+            session(['search1' => $request->search1, 'search2' => $request->search2]);
+
+            return view('kehadiran', ['request' => $request, 'data_jam' => $data_jam, 'data_jurnal_guru_group' => $data_jurnal_guru_group]);
+        }
+    }
+>>>>>>> 7f38a57 (feat: added refleksi siswa dan guru)
 }
